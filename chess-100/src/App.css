@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: darkolivegreen;
 }
 
 .board {
@@ -24,6 +25,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.cell img {
+  height: 48px;
+  width: 48px;
+  position: relative;
 }
 
 .black {

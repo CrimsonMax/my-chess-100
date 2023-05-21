@@ -3,14 +3,6 @@ import { Colors } from "./Colors"
 import { Figure } from "./figures/Figure"
 
 export class Cell {
-  readonly x: number
-  readonly y: number
-  readonly color: Colors
-  figure: Figure | null
-  board: Board
-  available: boolean // check if can be moved
-  id: number // for react keys
-
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
     this.board = board
     this.x = x
@@ -20,4 +12,12 @@ export class Cell {
     this.available = false
     this.id = Math.random()
   }
+  
+  readonly x: number
+  readonly y: number
+  readonly color: Colors
+  figure: Figure | null
+  board: Board
+  available: boolean // check if can be moved
+  id: number // for react keys
 }
