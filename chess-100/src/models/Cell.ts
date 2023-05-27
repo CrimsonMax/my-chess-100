@@ -20,4 +20,12 @@ export class Cell {
   board: Board
   available: boolean // check if can be moved
   id: number // for react keys
+
+  moveFigure(target: Cell) {
+    if (this.figure && this.figure?.canMove(target)) {
+      this.figure.moveFigure(target)
+      target.figure = this.figure
+      this.figure = null
+    }
+  }
 }
