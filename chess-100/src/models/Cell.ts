@@ -12,7 +12,7 @@ export class Cell {
     this.available = false
     this.id = Math.random()
   }
-  
+
   readonly x: number
   readonly y: number
   readonly color: Colors
@@ -20,15 +20,22 @@ export class Cell {
   board: Board
   available: boolean // check if can be moved
   id: number // for react keys
-  
+
   setFigure(figure: Figure) {
     this.figure = figure
     this.figure.cell = this
   }
-  
+
+  addLostFigure(figure: Figure) {
+    figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
+  }
+
   moveFigure(target: Cell) {
     if (this.figure && this.figure?.canMove(target)) {
       this.figure.moveFigure(target)
+
+      if (target.figure) this.addLostFigure(target.figure)
+
       target.setFigure(this.figure)
       this.figure = null
     }
@@ -53,10 +60,10 @@ export class Cell {
     for (let x = min + 1; x < max; x++) {
       if (!this.board.getCell(x, this.y).isEmpty()) return false
     }
-    
+
     return true
   }
-  
+
   isEmptyVertical(target: Cell): boolean {
     if (this.x !== target.x) return false
 
@@ -66,7 +73,7 @@ export class Cell {
     for (let y = min + 1; y < max; y++) {
       if (!this.board.getCell(this.x, y).isEmpty()) return false
     }
-    
+
     return true
   }
 

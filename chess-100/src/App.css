@@ -51,3 +51,15 @@
   border-radius: 50%;
   background-color: darkblue;
 }
+
+.current-player {
+  margin: 1rem;
+}
+
+.graveyard {
+  height: calc(50vh - 60px);
+  padding: 30px;
+  margin-left: 60px;
+  background-color: darkgray;
+  overflow-x: overlay;
+}
