@@ -1,4 +1,5 @@
 import logo from '../../assets/black-archer.png'
+import { Board } from '../Board';
 import { Cell } from '../Cell';
 import { Colors } from '../Colors'
 
@@ -21,6 +22,8 @@ export class Figure {
     this.logo = null
     this.name = FigureNames.FIGURE
     this.id = Math.random()
+    this.isFirstStep = true
+    // this.board = board
   }
 
   color: Colors
@@ -28,8 +31,10 @@ export class Figure {
   cell: Cell
   name: FigureNames
   id: number
+  isFirstStep: boolean
+  // board: Board
 
-  isFirstStep: boolean = true
+  
 
   canMove(target: Cell): boolean {
     if (target.figure?.color === this.color || target.figure?.name === FigureNames.KING) return false
@@ -38,8 +43,8 @@ export class Figure {
   }
 
   
-  moveFigure(target: Cell): void {
-    // super.moveFigure(target)
-    this.isFirstStep = false
-  }
+  // moveFigure(target: Cell): void {
+  //   // super.moveFigure(target)
+  //   this.isFirstStep = false
+  // }
 }

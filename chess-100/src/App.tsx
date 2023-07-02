@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className="App">
-      <Timer restart={restart} currentPlayer={currentPlayer}/>
+      {/* <Timer restart={restart} currentPlayer={currentPlayer}/> */}
       
       <BoardComponent
         board={board}

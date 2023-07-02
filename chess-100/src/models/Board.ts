@@ -94,22 +94,22 @@ export class Board {
   }
 
   private addQueens() {
-    new Queen(Colors.WHITE, this.getCell(4, 9))
-    new Queen(Colors.BLACK, this.getCell(4, 0))
+    new Queen(Colors.WHITE, this.getCell(5, 9))
+    new Queen(Colors.BLACK, this.getCell(5, 0))
   }
 
   private addKings() {
-    new King(Colors.WHITE, this.getCell(5, 9))
-    new King(Colors.BLACK, this.getCell(5, 0))
+    new King(Colors.WHITE, this.getCell(4, 9))
+    new King(Colors.BLACK, this.getCell(4, 0))
   }
 
   public addFigures() {
-    this.addPawns()
+    // this.addPawns()
     this.addRooks()
-    this.addKnights()
-    this.addArchers()
+    // this.addKnights()
+    // this.addArchers()
     this.addBishops()
-    this.addQueens()
+    // this.addQueens()
     this.addKings()
   }
 }

@@ -32,11 +32,34 @@ export class Cell {
 
   moveFigure(target: Cell) {
     if (this.figure && this.figure?.canMove(target)) {
-      this.figure.moveFigure(target)
+      // this.figure.moveFigure(target)
 
       if (target.figure) this.addLostFigure(target.figure)
 
+      if (this.figure.name === FigureNames.KING) {
+        if (Math.abs(this.x - target.x) === 4) {
+          const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 9).figure : this.board.getCell(9, 0).figure
+          const castleRight = this.figure?.color === Colors.WHITE ? this.board.getCell(7, 9) : this.board.getCell(7, 0)
+
+          rightRook?.cell.moveFigure(castleRight)
+        }
+        
+        if (Math.abs(this.x - target.x) === 3) {
+          // debugger
+          const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 9).figure : this.board.getCell(0, 0).figure
+          const castleLeft = this.figure?.color === Colors.WHITE ? this.board.getCell(2, 9) : this.board.getCell(2, 0)
+
+          leftRook?.cell.moveFigure(castleLeft)
+        }
+        // if (Math.abs(this.x - target.x) === 3) console.log('left')
+
+        // if (this.x - target.x === Math.abs(3)) console.log('left')
+        // console.log(this.x, this.y)
+        // console.log(target.x, target.y)
+      }
+
       target.setFigure(this.figure)
+      this.figure.isFirstStep = false
       this.figure = null
     }
   }
@@ -51,48 +74,62 @@ export class Cell {
     return false
   }
 
-  isMyCastle(target: Cell): boolean {
-    if (target.figure?.name === 'rook') return this.figure?.color === target.figure.color
+  // isMyCastle(target: Cell): boolean {
+  //   if (target.figure?.name === 'rook') return this.figure?.color === target.figure.color
 
-    return false
+  //   return false
+  // }
+
+  // canCastle() {
+  //   // if (this.y !== target.y) return false
+  //   console.log(this.board.getCell(0, 0).figure?.name)
+
+  //   // let x: number
+  //   // let y: number
+  //   // debugger
+  //   // if (this.figure?.color === Colors.WHITE) {
+  //   //   if (this.board.getCell(0, 0).figure
+  //   //     && this.board.getCell(0, 0).figure?.name === FigureNames.ROOK
+  //   //     && this.board.getCell(0, 0).figure?.isFirstStep) {
+  //   //     return true
+  //   //   }
+  //   // }
+
+  //   // const min = Math.min(this.x, target.x)
+  //   // const max = Math.max(this.x, target.x)
+
+  //   // // console.log(this.figure?.color)
+
+  //   // for (let x = min + 1; x < max; x++) {
+  //   //   // console.log(this.board.getCell(0, 0))
+  //   //   // console.log(this.board.getCell(9, 9))
+  //   //   // console.log(this.board.getCell(x, this.y))
+  //   //   // if (this.board.getCell(x, this.y)) return true
+
+  //   //   if (this.figure?.color === Colors.WHITE) {
+  //   //     if (this.board.getCell(x, this.y).figure
+  //   //       && this.board.getCell(x, this.y).figure?.name === FigureNames.ROOK
+  //   //       && this.board.getCell(x, this.y).figure?.isFirstStep) {
+  //   //       return true
+  //   //     }
+  //   //   }
+  //   // }
+
+  //   return false
+  // }
+
+  canCastleLeft(): boolean {
+    const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 0).figure : this.board.getCell(0, 9).figure
+    // const rightRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(9, 0).figure : this.cell.board.getCell(9, 9).figure
+
+    return leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
   }
 
-  canCastle() {
-    // if (this.y !== target.y) return false
-    console.log(this.board.getCell(0, 0).figure?.name)
+  canCastleRight(): boolean {
+    const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 0).figure : this.board.getCell(9, 9).figure
+    // const rightRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(9, 0).figure : this.cell.board.getCell(9, 9).figure
 
-    // let x: number
-    // let y: number
-    // debugger
-    // if (this.figure?.color === Colors.WHITE) {
-    //   if (this.board.getCell(0, 0).figure
-    //     && this.board.getCell(0, 0).figure?.name === FigureNames.ROOK
-    //     && this.board.getCell(0, 0).figure?.isFirstStep) {
-    //     return true
-    //   }
-    // }
-
-    // const min = Math.min(this.x, target.x)
-    // const max = Math.max(this.x, target.x)
-
-    // // console.log(this.figure?.color)
-
-    // for (let x = min + 1; x < max; x++) {
-    //   // console.log(this.board.getCell(0, 0))
-    //   // console.log(this.board.getCell(9, 9))
-    //   // console.log(this.board.getCell(x, this.y))
-    //   // if (this.board.getCell(x, this.y)) return true
-
-    //   if (this.figure?.color === Colors.WHITE) {
-    //     if (this.board.getCell(x, this.y).figure
-    //       && this.board.getCell(x, this.y).figure?.name === FigureNames.ROOK
-    //       && this.board.getCell(x, this.y).figure?.isFirstStep) {
-    //       return true
-    //     }
-    //   }
-    // }
-
-    return false
+    return rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
   }
 
   isEmptyHorizontal(target: Cell): boolean {
@@ -102,6 +139,7 @@ export class Cell {
     const max = Math.max(this.x, target.x)
 
     for (let x = min + 1; x < max; x++) {
+      // console.log(this.board.getCell(9, 0).isEmpty())
       if (!this.board.getCell(x, this.y).isEmpty()) return false
     }
 

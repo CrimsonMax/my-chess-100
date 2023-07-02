@@ -13,15 +13,22 @@
 }
 
 .board {
-  height: calc(64px * 10);
-  width: calc(64px * 10);
-  display: flex;
-  flex-wrap: wrap;
+  /* height: calc(64px * 10); */
+  /* width: calc(64px * 10); */
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
 }
 
 .cell {
-  height: 64px;
-  width: 64px;
+  /* height: 64px; */
+  /* width: 64px; */
+  height: 3rem;
+  width: 3rem;
+  
   display: flex;
   justify-content: center;
   align-items: center;
