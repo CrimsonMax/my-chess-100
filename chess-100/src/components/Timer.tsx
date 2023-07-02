@@ -10,12 +10,14 @@ interface TimerProps {
 const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
   const [whiteTime, setWhiteTime] = useState(300)
   const [blackTime, setBlackTime] = useState(300)
+  const [game, setGame] = useState(false)
 
   const timer = useRef<null | ReturnType<typeof setInterval>>(null)
 
   useEffect(() => {
-    startTimer()
-  }, [currentPlayer])
+    if (game) startTimer()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleRestartTime, currentPlayer])
   
   function minusWhiteTime() {
     setWhiteTime(prev => prev - 1)
@@ -36,6 +38,7 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
   }
 
   function handleRestartTime() {
+    setGame(true)
     setWhiteTime(300)
     setBlackTime(300)
     restart()
@@ -45,7 +48,7 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
     <div>
       <div>
         <button onClick={handleRestartTime}>
-          Restart
+          New Game Start
         </button>
       </div>
       <h2>White - {whiteTime}</h2>

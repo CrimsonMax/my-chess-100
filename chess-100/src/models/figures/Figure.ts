@@ -29,11 +29,17 @@ export class Figure {
   name: FigureNames
   id: number
 
+  isFirstStep: boolean = true
+
   canMove(target: Cell): boolean {
     if (target.figure?.color === this.color || target.figure?.name === FigureNames.KING) return false
     
     return true
   }
 
-  moveFigure(target: Cell) { }
+  
+  moveFigure(target: Cell): void {
+    // super.moveFigure(target)
+    this.isFirstStep = false
+  }
 }

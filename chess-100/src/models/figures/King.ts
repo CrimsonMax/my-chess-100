@@ -15,6 +15,15 @@ export class King extends Figure {
   canMove(target: Cell): boolean {
     if (!super.canMove(target)) return false
 
+    // if (this.cell.isEmptyHorizontal(target)) {
+    //   console.log(this.cell.isMyCastle(target))
+    //   return true
+    // }
+
+    if (this.cell.canCastle()) {
+      console.log('castle')
+    }
+
     const dx = Math.abs(this.cell.x - target.x)
     const dy = Math.abs(this.cell.y - target.y)
     

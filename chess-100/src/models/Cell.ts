@@ -1,6 +1,6 @@
 import { Board } from "./Board"
 import { Colors } from "./Colors"
-import { Figure } from "./figures/Figure"
+import { Figure, FigureNames } from "./figures/Figure"
 
 export class Cell {
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
@@ -47,6 +47,50 @@ export class Cell {
 
   isEnemy(target: Cell): boolean {
     if (target.figure) return this.figure?.color !== target.figure.color
+
+    return false
+  }
+
+  isMyCastle(target: Cell): boolean {
+    if (target.figure?.name === 'rook') return this.figure?.color === target.figure.color
+
+    return false
+  }
+
+  canCastle() {
+    // if (this.y !== target.y) return false
+    console.log(this.board.getCell(0, 0).figure?.name)
+
+    // let x: number
+    // let y: number
+    // debugger
+    // if (this.figure?.color === Colors.WHITE) {
+    //   if (this.board.getCell(0, 0).figure
+    //     && this.board.getCell(0, 0).figure?.name === FigureNames.ROOK
+    //     && this.board.getCell(0, 0).figure?.isFirstStep) {
+    //     return true
+    //   }
+    // }
+
+    // const min = Math.min(this.x, target.x)
+    // const max = Math.max(this.x, target.x)
+
+    // // console.log(this.figure?.color)
+
+    // for (let x = min + 1; x < max; x++) {
+    //   // console.log(this.board.getCell(0, 0))
+    //   // console.log(this.board.getCell(9, 9))
+    //   // console.log(this.board.getCell(x, this.y))
+    //   // if (this.board.getCell(x, this.y)) return true
+
+    //   if (this.figure?.color === Colors.WHITE) {
+    //     if (this.board.getCell(x, this.y).figure
+    //       && this.board.getCell(x, this.y).figure?.name === FigureNames.ROOK
+    //       && this.board.getCell(x, this.y).figure?.isFirstStep) {
+    //       return true
+    //     }
+    //   }
+    // }
 
     return false
   }

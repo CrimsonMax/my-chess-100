@@ -12,8 +12,6 @@ export class Pawn extends Figure {
     this.name = FigureNames.PAWN
   }
 
-  isFirstStep: boolean = true
-
   canMove(target: Cell): boolean {
     if (!super.canMove(target)) return false
 
@@ -35,10 +33,5 @@ export class Pawn extends Figure {
       }
 
       return false
-  }
-
-  moveFigure(target: Cell): void {
-    super.moveFigure(target)
-    this.isFirstStep = false
   }
 }
