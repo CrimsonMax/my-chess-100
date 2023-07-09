@@ -23,7 +23,7 @@ export class Figure {
     this.name = FigureNames.FIGURE
     this.id = Math.random()
     this.isFirstStep = true
-    // this.board = board
+    this.isJumped = false
   }
 
   color: Colors
@@ -32,19 +32,11 @@ export class Figure {
   name: FigureNames
   id: number
   isFirstStep: boolean
-  // board: Board
-
-  
+  isJumped: boolean
 
   canMove(target: Cell): boolean {
     if (target.figure?.color === this.color || target.figure?.name === FigureNames.KING) return false
     
     return true
   }
-
-  
-  // moveFigure(target: Cell): void {
-  //   // super.moveFigure(target)
-  //   this.isFirstStep = false
-  // }
 }

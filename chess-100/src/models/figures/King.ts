@@ -15,11 +15,6 @@ export class King extends Figure {
   canMove(target: Cell): boolean {
     if (!super.canMove(target)) return false
 
-    // if (this.cell.isEmptyHorizontal(target)) {
-    //   console.log(this.cell.isMyCastle(target))
-    //   return true
-    // }
-
     const dx = Math.abs(this.cell.x - target.x)
     const dy = Math.abs(this.cell.y - target.y)
 
@@ -28,24 +23,14 @@ export class King extends Figure {
 
     const leftRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(0, 9).figure : this.cell.board.getCell(0, 0).figure
     const rightRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(9, 9).figure : this.cell.board.getCell(9, 0).figure
-
-    
     
     const leftCastle = leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
     const rightCastle = rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
     
-    // const whiteLeftRookReady = this.cell.board.getCell(0, 0)
-    // const whiteRightRookReady = this.cell.board.getCell(9, 0).figure?.isFirstStep
-
-    // const blackLeftRookReady = this.cell.board.getCell(0, 9).figure?.isFirstStep
-    // const blackRightRookReady = this.cell.board.getCell(9, 9).figure?.isFirstStep
-    // debugger
     if (this.isFirstStep && this.cell.isEmptyHorizontal(target)) {
-      // console.log(this.cell.board.getCell(9, 0))
       return (dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1) || (leftCastle && dxLeft === 0 && dy === 0) || (rightCastle && dxRigth === 0 && dy === 0)
     }
     
     return (dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1)
-    // return false
   }
 }
