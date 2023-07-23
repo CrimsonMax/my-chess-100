@@ -1,5 +1,5 @@
 import logo from '../../assets/black-archer.png'
-import { Board } from '../Board';
+// import { Board } from '../Board';
 import { Cell } from '../Cell';
 import { Colors } from '../Colors'
 
@@ -24,6 +24,7 @@ export class Figure {
     this.id = Math.random()
     this.isFirstStep = true
     this.isJumped = false
+    this.isChecked = false
   }
 
   color: Colors
@@ -33,9 +34,10 @@ export class Figure {
   id: number
   isFirstStep: boolean
   isJumped: boolean
+  isChecked: boolean
 
   canMove(target: Cell): boolean {
-    if (target.figure?.color === this.color || target.figure?.name === FigureNames.KING) return false
+    if (target.figure?.color === this.color) return false
     
     return true
   }

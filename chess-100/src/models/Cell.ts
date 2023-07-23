@@ -24,6 +24,9 @@ export class Cell {
   static jumpX: number = 0
   static jumpY: number = 0
 
+  static checkX: number = 0
+  static checkY: number = 0
+
   setFigure(figure: Figure) {
     this.figure = figure
     this.figure.cell = this
@@ -34,18 +37,23 @@ export class Cell {
   }
 
   moveFigure(target: Cell) {
+    // console.log(target)
     if (this.figure && this.figure?.canMove(target)) {
+      if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
+      
       if (target.figure) this.addLostFigure(target.figure)
+      
 
+      // Castling
       if (this.figure.name === FigureNames.KING) {
-        if (Math.abs(this.x - target.x) === 4) {
+        if (this.x - target.x < 0) {
           const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 9).figure : this.board.getCell(9, 0).figure
-          const castleRight = this.figure?.color === Colors.WHITE ? this.board.getCell(7, 9) : this.board.getCell(7, 0)
+          const castleRight = this.figure?.color === Colors.WHITE ? this.board.getCell(6, 9) : this.board.getCell(6, 0)
 
           rightRook?.cell.moveFigure(castleRight)
         }
-        
-        if (Math.abs(this.x - target.x) === 3) {
+
+        if (this.x - target.x > 0) {
           const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 9).figure : this.board.getCell(0, 0).figure
           const castleLeft = this.figure?.color === Colors.WHITE ? this.board.getCell(2, 9) : this.board.getCell(2, 0)
 
@@ -53,28 +61,63 @@ export class Cell {
         }
       }
 
+      // Passing
+      // Can jump
       if (this.figure.name === FigureNames.PAWN && this.figure.isFirstStep && Math.abs(this.y - target.y) === 2) {
         this.figure.isJumped = true
         Cell.jumpX = target.x
         Cell.jumpY = target.y
-      } 
-
+      }
+      // Cannot jump
       if (this.board.getCell(Cell.jumpX, Cell.jumpY)?.figure?.isJumped) {
         const jumpedPawn = this.board.getCell(Cell.jumpX, Cell.jumpY).figure
         if (jumpedPawn?.isJumped) jumpedPawn.isJumped = false
       }
-
-      if (this.figure.name == FigureNames.PAWN && this.x !== target.x && !this.board.getCell(target.x, target.y).figure) {
+      // Can be attacked
+      if (this.figure.name === FigureNames.PAWN && this.x !== target.x && !this.board.getCell(target.x, target.y).figure) {
         let jumpedCell = this.board.getCell(Cell.jumpX, Cell.jumpY)
         if (jumpedCell.figure) {
           this.addLostFigure(jumpedCell.figure)
           jumpedCell.figure = null
         }
       }
-      
+
       target.setFigure(this.figure)
+      
       this.figure.isFirstStep = false
+
+      // Check
+      for (let i = 0; i < this.board.cells.length; i++) {
+        const row = this.board.cells[i]
+
+        for (let j = 0; j < row.length; j++) {
+          const point = row[j]
+
+          point.available = !!this.figure.canMove(point)
+
+          if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
+            console.log('Check!!')
+            point.figure.isChecked = true
+            Cell.checkX = point.figure.cell.x
+            Cell.checkY = point.figure.cell.y
+          }
+        }
+      }
+      console.log(this.figure.isChecked)
+
+      const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
+
+      if (checkedKing?.isChecked && checkedKing.color === this.figure.color) {
+        checkedKing.isChecked = false
+      }
+
+      // if (this.figure.name === FigureNames.KING && this.figure.isChecked) {
+      //   this.figure.isChecked = false
+      // }
+
       this.figure = null
+
+
     }
   }
 
@@ -88,17 +131,17 @@ export class Cell {
     return false
   }
 
-  canCastleLeft(): boolean {
-    const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 0).figure : this.board.getCell(0, 9).figure
+  // canCastleLeft(): boolean {
+  //   const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 0).figure : this.board.getCell(0, 9).figure
 
-    return leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
-  }
+  //   return leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
+  // }
 
-  canCastleRight(): boolean {
-    const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 0).figure : this.board.getCell(9, 9).figure
+  // canCastleRight(): boolean {
+  //   const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 0).figure : this.board.getCell(9, 9).figure
 
-    return rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
-  }
+  //   return rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
+  // }
 
   isEmptyHorizontal(target: Cell): boolean {
     if (this.y !== target.y) return false
@@ -135,6 +178,8 @@ export class Cell {
     const dx = this.x < target.x ? 1 : -1
     const dy = this.y < target.y ? 1 : -1
 
+
+    // remove for check
     for (let i = 1; i < absY; i++) {
       if (!this.board.getCell(this.x + dx * i, this.y + dy * i).isEmpty()) return false
     }

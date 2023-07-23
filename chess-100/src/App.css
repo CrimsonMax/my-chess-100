@@ -35,8 +35,10 @@
 }
 
 .cell img {
-  height: 48px;
-  width: 48px;
+  /* height: 48px; */
+  /* width: 48px; */
+  height: 2.5rem;
+  width: 2.5rem;
   position: relative;
 }
 

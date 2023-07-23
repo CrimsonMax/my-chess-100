@@ -3,6 +3,7 @@ import { Board } from "../models/Board"
 import CellComponent from "./CellComponent"
 import { Cell } from "../models/Cell"
 import { Player } from "../models/Player"
+import { FigureNames } from "../models/figures/Figure"
 
 interface BoardProps {
   board: Board,
@@ -20,12 +21,25 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
   }, [selectedCell])
 
   function click(cell: Cell) {
+    // const checkedKing = board.getCell(Cell.checkX, Cell.checkY).figure?.isChecked
+
+    // if (checkedKing) {
+
+    // }
+    if (selectedCell === cell) {
+      setSelectedCell(null)
+      highlightCells()
+      return
+    }
+
     if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
       selectedCell.moveFigure(cell)
       swapPlayer()
       setSelectedCell(null)
       updateBoard()
     } else {
+      // if (checkedKing && cell.figure?.name !== FigureNames.KING) return
+      
       if (cell.figure?.color === currentPlayer?.color) {
         setSelectedCell(cell)
       }

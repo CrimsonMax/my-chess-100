@@ -19,7 +19,7 @@ export class King extends Figure {
     const dy = Math.abs(this.cell.y - target.y)
 
     const dxLeft = Math.abs((this.cell.x - 3) - target.x)
-    const dxRigth = Math.abs((this.cell.x + 4) - target.x)
+    const dxRigth = Math.abs((this.cell.x + 3) - target.x)
 
     const leftRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(0, 9).figure : this.cell.board.getCell(0, 0).figure
     const rightRook = this.cell.figure?.color === Colors.WHITE ? this.cell.board.getCell(9, 9).figure : this.cell.board.getCell(9, 0).figure
@@ -27,7 +27,7 @@ export class King extends Figure {
     const leftCastle = leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
     const rightCastle = rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
     
-    if (this.isFirstStep && this.cell.isEmptyHorizontal(target)) {
+    if (this.isFirstStep && this.cell.isEmptyHorizontal(target) && !this.isChecked) {
       return (dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1) || (leftCastle && dxLeft === 0 && dy === 0) || (rightCastle && dxRigth === 0 && dy === 0)
     }
     
