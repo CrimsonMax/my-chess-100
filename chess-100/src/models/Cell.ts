@@ -1,6 +1,7 @@
 import { Board } from "./Board"
 import { Colors } from "./Colors"
 import { Figure, FigureNames } from "./figures/Figure"
+// import { Rook } from "./figures/Rook"
 
 export class Cell {
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
@@ -36,13 +37,13 @@ export class Cell {
     figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
   }
 
-  moveFigure(target: Cell) {
-    // console.log(target)
+  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors) => void) {
     if (this.figure && this.figure?.canMove(target)) {
+      // Kill the King
       if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
-      
+
+      // Eating
       if (target.figure) this.addLostFigure(target.figure)
-      
 
       // Castling
       if (this.figure.name === FigureNames.KING) {
@@ -50,14 +51,14 @@ export class Cell {
           const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 9).figure : this.board.getCell(9, 0).figure
           const castleRight = this.figure?.color === Colors.WHITE ? this.board.getCell(6, 9) : this.board.getCell(6, 0)
 
-          rightRook?.cell.moveFigure(castleRight)
+          rightRook?.cell.moveFigure(castleRight, isPromo)
         }
 
         if (this.x - target.x > 0) {
           const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 9).figure : this.board.getCell(0, 0).figure
           const castleLeft = this.figure?.color === Colors.WHITE ? this.board.getCell(2, 9) : this.board.getCell(2, 0)
 
-          leftRook?.cell.moveFigure(castleLeft)
+          leftRook?.cell.moveFigure(castleLeft, isPromo)
         }
       }
 
@@ -82,40 +83,50 @@ export class Cell {
         }
       }
 
-      target.setFigure(this.figure)
+      // Promotion
+      // this.figure = new Rook(this.color, target)
+      // console.log(this.color)
+      // console.log(typeof target)
+      // console.log(target.x)
+      // console.log(target.y)
+
+      let promotion = (this.figure.color === Colors.WHITE && target.y === 0) || (this.figure.color === Colors.BLACK && target.y === 9)
       
-      this.figure.isFirstStep = false
+      if (this.figure.name === FigureNames.PAWN && promotion) {
+        isPromo(true, this.figure.color)
+      } else {
+        target.setFigure(this.figure)
 
-      // Check
-      for (let i = 0; i < this.board.cells.length; i++) {
-        const row = this.board.cells[i]
+        this.figure.isFirstStep = false
 
-        for (let j = 0; j < row.length; j++) {
-          const point = row[j]
+        // Check
+        for (let i = 0; i < this.board.cells.length; i++) {
+          const row = this.board.cells[i]
 
-          point.available = !!this.figure.canMove(point)
+          for (let j = 0; j < row.length; j++) {
+            const point = row[j]
 
-          if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
-            console.log('Check!!')
-            point.figure.isChecked = true
-            Cell.checkX = point.figure.cell.x
-            Cell.checkY = point.figure.cell.y
+            point.available = !!this.figure.canMove(point)
+
+            if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
+              point.figure.isChecked = true
+              Cell.checkX = point.figure.cell.x
+              Cell.checkY = point.figure.cell.y
+            }
           }
         }
+        const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
+
+        if (checkedKing?.isChecked && checkedKing.color === this.figure.color) {
+          checkedKing.isChecked = false
+        }
+
+        // if (this.figure.name === FigureNames.KING && this.figure.isChecked) {
+        //   this.figure.isChecked = false
+        // }
+
+        this.figure = null
       }
-      console.log(this.figure.isChecked)
-
-      const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
-
-      if (checkedKing?.isChecked && checkedKing.color === this.figure.color) {
-        checkedKing.isChecked = false
-      }
-
-      // if (this.figure.name === FigureNames.KING && this.figure.isChecked) {
-      //   this.figure.isChecked = false
-      // }
-
-      this.figure = null
 
 
     }

@@ -28,7 +28,7 @@
   /* width: 64px; */
   height: 3rem;
   width: 3rem;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,6 +48,42 @@
 
 .white {
   background-color: darkgoldenrod;
+}
+
+.blank {
+  background-color: cadetblue;
+}
+
+.queen.black {
+  background-image: url(assets/black-queen.png);
+}
+.rook.black {
+  background-image: url(assets/black-rook.png);
+}
+.knight.black {
+  background-image: url(assets/black-knight.png);
+}
+.archer.black {
+  background-image: url(assets/black-archer.png);
+}
+.bishop.black {
+  background-image: url(assets/black-bishop.png);
+}
+
+.queen.white {
+  background-image: url(assets/white-queen.png);
+}
+.rook.white {
+  background-image: url(assets/white-rook.png);
+}
+.knight.white {
+  background-image: url(assets/white-knight.png);
+}
+.archer.white {
+  background-image: url(assets/white-archer.png);
+}
+.bishop.white {
+  background-image: url(assets/white-bishop.png);
 }
 
 .selected {
@@ -71,4 +107,54 @@
   margin-left: 60px;
   background-color: darkgray;
   overflow-x: overlay;
+}
+
+.promo-modal {
+  display: none;
+}
+.promo-modal.active {
+  display: block;
+}
+.promo-modal .cell {
+  background-size: 2.5rem;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.promo-background {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  opacity: 0.6;
+}
+
+.promo-container {
+  height: 12rem;
+  width: 18rem;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.promo-title {
+  font-weight: 600;
+  padding: 0.5rem;
+}
+
+.promo-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  height: 6.5rem;
+  width: 12rem;
 }

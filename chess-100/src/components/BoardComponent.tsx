@@ -4,15 +4,17 @@ import CellComponent from "./CellComponent"
 import { Cell } from "../models/Cell"
 import { Player } from "../models/Player"
 import { FigureNames } from "../models/figures/Figure"
+import { Colors } from "../models/Colors"
 
 interface BoardProps {
   board: Board,
   setBoard: (board: Board) => void,
   currentPlayer: Player | null,
   swapPlayer: () => void,
+  thePromotion: (isModal: boolean, color: Colors) => void,
 }
 
-const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer }) => {
+const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion }) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
     }
 
     if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
-      selectedCell.moveFigure(cell)
+      selectedCell.moveFigure(cell, thePromotion)
       swapPlayer()
       setSelectedCell(null)
       updateBoard()
