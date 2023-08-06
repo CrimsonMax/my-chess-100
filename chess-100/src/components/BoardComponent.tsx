@@ -11,7 +11,7 @@ interface BoardProps {
   setBoard: (board: Board) => void,
   currentPlayer: Player | null,
   swapPlayer: () => void,
-  thePromotion: (isModal: boolean, color: Colors) => void,
+  thePromotion: (isModal: boolean, color: Colors, promoCell: Cell) => void,
 }
 
 const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion }) => {

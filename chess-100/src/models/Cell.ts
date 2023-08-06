@@ -37,7 +37,7 @@ export class Cell {
     figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
   }
 
-  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors) => void) {
+  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors, promoCell: Cell) => void) {
     if (this.figure && this.figure?.canMove(target)) {
       // Kill the King
       if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
@@ -91,9 +91,15 @@ export class Cell {
       // console.log(target.y)
 
       let promotion = (this.figure.color === Colors.WHITE && target.y === 0) || (this.figure.color === Colors.BLACK && target.y === 9)
-      
+
       if (this.figure.name === FigureNames.PAWN && promotion) {
-        isPromo(true, this.figure.color)
+        // console.log(this.figure.name)
+        target.setFigure(this.figure)
+        let color = this.figure.color
+        let x = target.x
+        let promoCell = this.board.getCell(target.x, target.y)
+        this.figure = null
+        isPromo(true, color, promoCell)
       } else {
         target.setFigure(this.figure)
 

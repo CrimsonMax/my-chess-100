@@ -16,6 +16,10 @@ function App() {
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
   const [promoActive, setPromoActive] = useState(false)
   const [promoColor, setPromoColor] = useState(Colors.WHITE)
+  const [promoName, setPromoName] = useState('')
+  const [target, setTarget] = useState<Cell | null>(null)
+  // const [targetY, setTargetY] = useState(0)
+  // const [promoCell, setPromoCell] = useState(Cell)
   // const [promoTarget, setPromoTarget] = useState()
 
   useEffect(() => {
@@ -35,9 +39,10 @@ function App() {
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer)
   }
 
-  function thePromotion(active: boolean, color: Colors) {
-    setPromoActive(active)
+  function thePromotion(active: boolean, color: Colors, promoCell: Cell) {
     setPromoColor(color)
+    setTarget(promoCell)
+    setPromoActive(active)
   }
 
   return (
@@ -57,7 +62,7 @@ function App() {
         <LostFigures title='Black Army' figures={board.lostBlackFigures}/>
       </div>
 
-      <PromotionModal active={promoActive} color={promoColor} />
+      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target}/>
     </div>
   );
 }
