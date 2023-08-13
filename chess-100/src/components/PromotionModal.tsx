@@ -12,19 +12,11 @@ interface Promo {
   active: boolean
   setActive: (isActive: boolean) => void
   color: Colors
-  // setName: (name: string) => void
   target: Cell | null
-  // y: number
-  // cell: Cell
 }
-
-// function setPromoFigure(name) {
-  
-// }
 
 const PromotionModal: FC<Promo> = ({ active, setActive, color, target }) => {
   function setPromoFigure(name: string) {
-    // setName(name)
     if (target === null) return
 
     switch (name) {
@@ -52,8 +44,6 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target }) => {
         break;
     }
 
-    // let y = color === Colors.WHITE ? 0 : 9
-    
     setActive(false)
   }
   

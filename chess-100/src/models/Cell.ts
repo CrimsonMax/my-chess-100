@@ -12,6 +12,7 @@ export class Cell {
     this.figure = figure
     this.available = false
     this.id = Math.random()
+    this.redCell = false
   }
 
   readonly x: number
@@ -21,6 +22,7 @@ export class Cell {
   board: Board
   available: boolean // check if can be moved
   id: number // for react keys
+  redCell: boolean
 
   static jumpX: number = 0
   static jumpY: number = 0
@@ -84,20 +86,14 @@ export class Cell {
       }
 
       // Promotion
-      // this.figure = new Rook(this.color, target)
-      // console.log(this.color)
-      // console.log(typeof target)
-      // console.log(target.x)
-      // console.log(target.y)
-
       let promotion = (this.figure.color === Colors.WHITE && target.y === 0) || (this.figure.color === Colors.BLACK && target.y === 9)
 
       if (this.figure.name === FigureNames.PAWN && promotion) {
-        // console.log(this.figure.name)
         target.setFigure(this.figure)
+
         let color = this.figure.color
-        let x = target.x
         let promoCell = this.board.getCell(target.x, target.y)
+
         this.figure = null
         isPromo(true, color, promoCell)
       } else {
@@ -106,32 +102,68 @@ export class Cell {
         this.figure.isFirstStep = false
 
         // Check
+        let currentColor = this.figure.color
+        const redCells: Array<Cell> = []
+        const redArmy: Array<Figure> = []
+
+        this.figure = null
+
         for (let i = 0; i < this.board.cells.length; i++) {
           const row = this.board.cells[i]
 
           for (let j = 0; j < row.length; j++) {
             const point = row[j]
 
-            point.available = !!this.figure.canMove(point)
-
-            if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
-              point.figure.isChecked = true
-              Cell.checkX = point.figure.cell.x
-              Cell.checkY = point.figure.cell.y
+            if (point?.figure?.color === currentColor) {
+              redArmy.push(point.figure)
             }
+
+            // console.log(point)
+
+            ////////////////////////////////
+
+            // point.available = !!this.figure.canMove(point)
+
+            // if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
+            //   point.figure.isChecked = true
+            //   Cell.checkX = point.figure.cell.x
+            //   Cell.checkY = point.figure.cell.y
+            // }
           }
         }
-        const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
+        redArmy.forEach(elem => {
+          for (let i = 0; i < this.board.cells.length; i++) {
+            const row = this.board.cells[i]
 
-        if (checkedKing?.isChecked && checkedKing.color === this.figure.color) {
-          checkedKing.isChecked = false
-        }
+            for (let j = 0; j < row.length; j++) {
+              const point = row[j]
+
+              if (elem.name !== FigureNames.PAWN && elem.canMove(point)) {
+                point.redCell = true
+              }
+
+              if (elem.name === FigureNames.PAWN) {
+                if (elem.cell.x !== 0) this.board.getCell(elem.cell.x - 1, currentColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
+                if (elem.cell.x < 9) this.board.getCell(elem.cell.x + 1, currentColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
+              }
+
+              // point.available = !!figure.canMove(point)
+            }
+          }
+        })
+        console.log(redArmy)
+
+        // const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
+
+        // if (checkedKing?.isChecked && checkedKing.color === this.figure.color) {
+        //   checkedKing.isChecked = false
+        // }
 
         // if (this.figure.name === FigureNames.KING && this.figure.isChecked) {
         //   this.figure.isChecked = false
         // }
 
-        this.figure = null
+
       }
 
 
