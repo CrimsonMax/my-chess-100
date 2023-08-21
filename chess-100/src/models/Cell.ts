@@ -106,17 +106,32 @@ export class Cell {
         const redCells: Array<Cell> = []
         const redArmy: Array<Figure> = []
 
+        // cancel move
+        // if (this.figure.name === FigureNames.PAWN) {
+        //   this.figure.cell.setFigure(this.figure)
+        //   target.figure = null
+        //   return
+        // }
+
         this.figure = null
 
         for (let i = 0; i < this.board.cells.length; i++) {
-          const row = this.board.cells[i]
+          const row: Cell[] = this.board.cells[i]
 
           for (let j = 0; j < row.length; j++) {
-            const point = row[j]
+            const point: Cell = row[j]
+
+            if (point.redCell) point.redCell = false
+
+            let oppositeColor: Colors = currentColor === Colors.WHITE ? Colors.BLACK : Colors.WHITE
 
             if (point?.figure?.color === currentColor) {
               redArmy.push(point.figure)
             }
+
+            // if (point?.figure?.color === oppositeColor) {
+            //   redArmy.push(point.figure)
+            // }
 
             // console.log(point)
 
@@ -131,6 +146,7 @@ export class Cell {
             // }
           }
         }
+        
         redArmy.forEach(elem => {
           for (let i = 0; i < this.board.cells.length; i++) {
             const row = this.board.cells[i]
