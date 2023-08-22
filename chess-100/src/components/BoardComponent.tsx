@@ -37,8 +37,10 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
 
     if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
       selectedCell.moveFigure(cell, thePromotion)
+
       // cancel move
       if (true) swapPlayer()
+      
       setSelectedCell(null)
       updateBoard()
     } else {
