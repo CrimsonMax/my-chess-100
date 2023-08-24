@@ -39,7 +39,7 @@ export class Cell {
     figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
   }
 
-  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors, promoCell: Cell) => void) {
+  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors, promoCell: Cell) => void): boolean {
     if (this.figure && this.figure?.canMove(target)) {
       // Kill the King
       if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
@@ -103,8 +103,12 @@ export class Cell {
         this.figure = null
         isPromo(true, color, promoCell)
       } else {
+        let currentFigure: Figure = this.figure
+        let currentCell: Cell = this.figure.cell
+        let currentFirstStep: boolean = this.figure.isFirstStep
+        // console.log(this.figure.cell)
         target.setFigure(this.figure)
-
+        // console.log(this.figure.cell)
         this.figure.isFirstStep = false
 
         // Check
@@ -113,8 +117,6 @@ export class Cell {
         const redCells: Array<Cell> = []
         const redArmy: Array<Figure> = []
 
-        let currentFigure: Figure = this.figure
-        let currentCell: Cell = this.figure.cell
 
         this.figure = null
         // console.log(currentFigure)
@@ -192,10 +194,15 @@ export class Cell {
 
               // debugger
               this.figure = currentFigure
-              this.figure.cell.setFigure(this.figure)
+              currentCell.setFigure(this.figure)
+              // target.figure?.cell = null
+              this.figure.isFirstStep = currentFirstStep
+              // console.log(target.figure?.cell)
               target.figure = null
+              // this.figure = null
+              // target = this.figure.cell
               // status = cancel
-              return
+              return false
             }
           }
         }
@@ -258,7 +265,7 @@ export class Cell {
 
         const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
 
-        console.log(checkedKing?.isChecked)
+        // console.log(checkedKing?.isChecked)
 
         if (checkedKing?.isChecked && checkedKing.color === currentColor) {
           checkedKing.isChecked = false
@@ -273,6 +280,8 @@ export class Cell {
 
 
     }
+
+    return true
   }
 
   isEmpty(): boolean {

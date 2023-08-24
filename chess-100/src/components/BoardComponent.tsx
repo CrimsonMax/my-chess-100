@@ -16,6 +16,7 @@ interface BoardProps {
 
 const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion }) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
+  // const [cancel, setCancel] = useState<boolean>(false)
 
   useEffect(() => {
     highlightCells()
@@ -35,30 +36,57 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
       return
     }
 
+    // let a = selectedCell?.moveFigure(cell, thePromotion)
+
+    // if (!a) return
+
     if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
-      selectedCell.moveFigure(cell, thePromotion)
+      // const currentBoard = board.getCopyBoard()
+
+      // console.log('select destination')
+
+      let a = selectedCell.moveFigure(cell, thePromotion)
 
       // cancel move
-      if (true) swapPlayer()
-      
-      setSelectedCell(null)
+      if (a) {
+        // setCancel(false)
+        setSelectedCell(null)
+        swapPlayer()
+      } else {
+        // setCancel(true)
+        // setSelectedCell(cell)
+        // setBoard(currentBoard)
+        // return
+      }
+
+      // selectedCell.moveFigure(cell, thePromotion)
+
+      // setSelectedCell(null)
+      // swapPlayer()
+
       updateBoard()
     } else {
       // if (checkedKing && cell.figure?.name !== FigureNames.KING) return
-      
+
       if (cell.figure?.color === currentPlayer?.color) {
+        // console.log('select figure')
         setSelectedCell(cell)
       }
     }
   }
 
   function highlightCells() {
+    // console.log('click on cell')
     board.highlightCells(selectedCell)
     updateBoard()
   }
 
   function updateBoard() {
     const newBoard = board.getCopyBoard()
+
+    // console.log(cancel)
+
+    // if (cancel) return
 
     setBoard(newBoard)
   }
