@@ -46,6 +46,8 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target }) => {
 
     setActive(false)
   }
+
+  /* set red cells */
   
   return (
     <div className={active ? 'promo-modal active' : 'promo-modal'}>

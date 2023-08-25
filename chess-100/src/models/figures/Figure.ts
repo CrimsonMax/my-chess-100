@@ -75,4 +75,10 @@ export class Figure {
 
     return true
   }
+
+  canDefence(target: Cell): boolean {
+    // if ((target.figure?.color === this.color)) return true
+
+    return true
+  }
 }

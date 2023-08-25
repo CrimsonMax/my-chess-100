@@ -42,16 +42,19 @@ export class Cell {
   moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors, promoCell: Cell) => void): boolean {
     if (this.figure && this.figure?.canMove(target)) {
       // Kill the King
-      if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
+      // if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
 
       // let forbiddenCell: Boolean = false
-      
+
       // if (this.figure.name === FigureNames.KING && target.redCell) {
       //   forbiddenCell = true
       // }
 
       // Eating
-      if (target.figure) this.addLostFigure(target.figure)
+      let killedEnemy = target.figure
+      // console.log(killedEnemy)
+      // if (target.figure) this.addLostFigure(target.figure)
+      // if (killedEnemy) this.addLostFigure(killedEnemy)
 
       // Castling
       if (this.figure.name === FigureNames.KING) {
@@ -112,7 +115,7 @@ export class Cell {
         this.figure.isFirstStep = false
 
         // Check
-        let currentColor = this.figure.color
+        let currentColor: Colors = this.figure.color
         let oppositeColor: Colors = currentColor === Colors.WHITE ? Colors.BLACK : Colors.WHITE
         const redCells: Array<Cell> = []
         const redArmy: Array<Figure> = []
@@ -159,7 +162,7 @@ export class Cell {
             for (let j = 0; j < row.length; j++) {
               const point: Cell = row[j]
 
-              if (elem.name !== FigureNames.PAWN && elem.canMove(point)) {
+              if (elem.name !== FigureNames.PAWN && elem.canDefence(point) && point.figure !== elem) {
                 point.redCell = true
               }
 
@@ -198,7 +201,11 @@ export class Cell {
               // target.figure?.cell = null
               this.figure.isFirstStep = currentFirstStep
               // console.log(target.figure?.cell)
-              target.figure = null
+              // console.log(target.figure)
+              killedEnemy ? target.figure = killedEnemy : target.figure = null
+
+              /* remark red cells if killedEnemy */
+
               // this.figure = null
               // target = this.figure.cell
               // status = cancel
@@ -233,7 +240,7 @@ export class Cell {
             for (let j = 0; j < row.length; j++) {
               const point: Cell = row[j]
 
-              if (elem.name !== FigureNames.PAWN && elem.canMove(point)) {
+              if (elem.name !== FigureNames.PAWN && elem.canDefence(point) && point.figure !== elem) {
                 point.redCell = true
               }
 
@@ -275,10 +282,12 @@ export class Cell {
         //   this.figure.isChecked = false
         // }
 
-
+        // // Eating
+        // if (target.figure?.color === oppositeColor) this.addLostFigure(target.figure)
       }
 
 
+      if (killedEnemy) this.addLostFigure(killedEnemy)
     }
 
     return true

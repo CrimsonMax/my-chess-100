@@ -6,7 +6,7 @@ import whiteLogo from '../../assets/white-archer.png'
 
 export class Archer extends Figure {
   constructor(color: Colors, cell: Cell) {
-    super(color , cell)
+    super(color, cell)
 
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo
     this.name = FigureNames.ARCHER
@@ -14,10 +14,19 @@ export class Archer extends Figure {
 
   canMove(target: Cell): boolean {
     if (!super.canMove(target)) return false
-    
+
     const dx = Math.abs(this.cell.x - target.x)
     const dy = Math.abs(this.cell.y - target.y)
-    
+
+    return (dx === 2 && dy === 0) || (dx === 0 && dy === 2) || (dx === 2 && dy === 2)
+  }
+
+  canDefence(target: Cell): boolean {
+    // if (!super.canMove(target)) return false
+
+    const dx = Math.abs(this.cell.x - target.x)
+    const dy = Math.abs(this.cell.y - target.y)
+
     return (dx === 2 && dy === 0) || (dx === 0 && dy === 2) || (dx === 2 && dy === 2)
   }
 }

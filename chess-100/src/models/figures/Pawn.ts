@@ -23,8 +23,8 @@ export class Pawn extends Figure {
     if (
       ((target.y === this.cell.y + direction) || (theJump))
       &&
-      target.x === this.cell.x 
-      && 
+      target.x === this.cell.x
+      &&
       this.cell.board.getCell(target.x, target.y).isEmpty()
     ) {
 
@@ -51,5 +51,9 @@ export class Pawn extends Figure {
     }
 
     return false
+  }
+
+  canDefence(target: Cell): boolean {
+    return true
   }
 }
