@@ -39,7 +39,7 @@ export class Cell {
     figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
   }
 
-  moveFigure(target: Cell, isPromo: (isModal: boolean, color: Colors, promoCell: Cell) => void): boolean {
+  moveFigure(target: Cell, isPromo?: (isModal: boolean, color: Colors, promoCell: Cell, startCell: Cell) => void): boolean {
     if (this.figure && this.figure?.canMove(target)) {
       // Kill the King
       // if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
@@ -97,14 +97,16 @@ export class Cell {
       // Promotion
       let promotion = (this.figure.color === Colors.WHITE && target.y === 0) || (this.figure.color === Colors.BLACK && target.y === 9)
 
-      if (this.figure.name === FigureNames.PAWN && promotion) {
+      if (this.figure.name === FigureNames.PAWN && promotion && isPromo) {
         target.setFigure(this.figure)
 
         let color = this.figure.color
         let promoCell = this.board.getCell(target.x, target.y)
+        let startCell = this.board.getCell(this.x, this.y)
 
         this.figure = null
-        isPromo(true, color, promoCell)
+        promoCell.figure = null
+        isPromo(true, color, promoCell, startCell)
       } else {
         let currentFigure: Figure = this.figure
         let currentCell: Cell = this.figure.cell
@@ -155,6 +157,13 @@ export class Cell {
             // }
           }
         }
+
+        const killedCells: Array<Cell> = []
+
+        // if (killedEnemy){
+        //   redArmy.push(killedEnemy)
+        // }
+
         redArmy.forEach(elem => {
           for (let i = 0; i < this.board.cells.length; i++) {
             const row: Cell[] = this.board.cells[i]
@@ -164,6 +173,13 @@ export class Cell {
 
               if (elem.name !== FigureNames.PAWN && elem.canDefence(point) && point.figure !== elem) {
                 point.redCell = true
+
+                // console.log(killedEnemy)
+                // console.log(elem)
+                // debugger
+                // if (elem === killedEnemy) {
+                //   killedCells.push(point)
+                // }
               }
 
               if (elem.name === FigureNames.PAWN) {
@@ -202,7 +218,15 @@ export class Cell {
               this.figure.isFirstStep = currentFirstStep
               // console.log(target.figure?.cell)
               // console.log(target.figure)
-              killedEnemy ? target.figure = killedEnemy : target.figure = null
+              // killedEnemy ? target.figure = killedEnemy : target.figure = null
+
+              if (killedEnemy) {
+                target.figure = killedEnemy
+                // console.log(killedCells)
+                // killedCells.forEach(elem => elem.redCell = true)
+              } else {
+                target.figure = null
+              }
 
               /* remark red cells if killedEnemy */
 

@@ -13,36 +13,39 @@ interface Promo {
   setActive: (isActive: boolean) => void
   color: Colors
   target: Cell | null
+  startCell: Cell | null
 }
 
-const PromotionModal: FC<Promo> = ({ active, setActive, color, target }) => {
+const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell }) => {
   function setPromoFigure(name: string) {
-    if (target === null) return
+    if (target === null || startCell === null) return
 
     switch (name) {
       case FigureNames.QUEEN:
-        new Queen(color, target)
+        new Queen(color, startCell)
         break;
     
       case FigureNames.ROOK:
-        new Rook(color, target)
+        new Rook(color, startCell)
         break;
     
       case FigureNames.KNIGHT:
-        new Knight(color, target)
+        new Knight(color, startCell)
         break;
     
       case FigureNames.ARCHER:
-        new Archer(color, target)
+        new Archer(color, startCell)
         break;
     
       case FigureNames.BISHOP:
-        new Bishop(color, target)
+        new Bishop(color, startCell)
         break;
     
       default:
         break;
     }
+
+    startCell.moveFigure(target)
 
     setActive(false)
   }

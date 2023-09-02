@@ -18,6 +18,7 @@ function App() {
   const [promoColor, setPromoColor] = useState(Colors.WHITE)
   const [promoName, setPromoName] = useState('')
   const [target, setTarget] = useState<Cell | null>(null)
+  const [startCell, setStartCell] = useState<Cell | null>(null)
   // const [targetY, setTargetY] = useState(0)
   // const [promoCell, setPromoCell] = useState(Cell)
   // const [promoTarget, setPromoTarget] = useState()
@@ -39,9 +40,10 @@ function App() {
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer)
   }
 
-  function thePromotion(active: boolean, color: Colors, promoCell: Cell) {
+  function thePromotion(active: boolean, color: Colors, promoCell: Cell, startCell: Cell) {
     setPromoColor(color)
     setTarget(promoCell)
+    setStartCell(startCell)
     setPromoActive(active)
   }
 
@@ -62,7 +64,7 @@ function App() {
         <LostFigures title='Black Army' figures={board.lostBlackFigures}/>
       </div>
 
-      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target}/>
+      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target} startCell={startCell}/>
     </div>
   );
 }
