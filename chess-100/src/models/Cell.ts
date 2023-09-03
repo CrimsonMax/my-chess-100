@@ -289,6 +289,9 @@ export class Cell {
 
               alert('CHECK!')
             }
+            // enemyKingCellAround.forEach(if canMove to)
+            // enemyCellsArray.forEach(if canMove to checkersCell || to checkers attack path)
+            // then - Alert 'Checkmate!'
           }
         }
 
