@@ -40,7 +40,9 @@ export class Cell {
   }
 
   moveFigure(target: Cell, isPromo?: (isModal: boolean, color: Colors, promoCell: Cell, startCell: Cell) => void): boolean {
-    if (this.figure && this.figure?.canMove(target)) {
+    // !isPromo && console.log('promo')
+    // console.log(isPromo)
+    if (this.figure && (this.figure?.canMove(target) || !isPromo)) {
       // Kill the King
       // if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
 

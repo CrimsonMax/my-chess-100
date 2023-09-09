@@ -20,6 +20,8 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell
   function setPromoFigure(name: string) {
     if (target === null || startCell === null) return
 
+    // console.log(startCell)
+
     switch (name) {
       case FigureNames.QUEEN:
         new Queen(color, startCell)
