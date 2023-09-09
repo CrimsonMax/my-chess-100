@@ -25,6 +25,7 @@ export class Figure {
     this.isFirstStep = true
     this.isJumped = false
     this.isChecked = false
+    this.isCheckmate = false
   }
 
   color: Colors
@@ -35,6 +36,7 @@ export class Figure {
   isFirstStep: boolean
   isJumped: boolean
   isChecked: boolean
+  isCheckmate: boolean
 
   canMove(target: Cell): boolean {
     if (

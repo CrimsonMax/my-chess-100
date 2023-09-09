@@ -124,6 +124,7 @@ export class Cell {
         const redCells: Array<Cell> = []
         const redArmy: Array<Figure> = []
 
+        let attackerName: FigureNames = this.figure.name
 
         this.figure = null
         // console.log(currentFigure)
@@ -278,6 +279,10 @@ export class Cell {
           }
         })
         // set enemy's king status
+        let kingFigure: Figure | null = null
+        let kingCanMove: boolean = false
+        // let attackerName = 
+
         for (let i = 0; i < this.board.cells.length; i++) {
           const row: Cell[] = this.board.cells[i]
 
@@ -289,8 +294,38 @@ export class Cell {
               Cell.checkX = point.figure.cell.x
               Cell.checkY = point.figure.cell.y
 
+              kingFigure = point.figure
+
+              const kingsArray: Cell[] = [
+                this.board.getCell(Cell.checkX, Cell.checkY + 1),
+                this.board.getCell(Cell.checkX, Cell.checkY - 1),
+                this.board.getCell(Cell.checkX + 1, Cell.checkY),
+                this.board.getCell(Cell.checkX - 1, Cell.checkY),
+                this.board.getCell(Cell.checkX + 1, Cell.checkY + 1),
+                this.board.getCell(Cell.checkX - 1, Cell.checkY - 1),
+                this.board.getCell(Cell.checkX + 1, Cell.checkY - 1),
+                this.board.getCell(Cell.checkX - 1, Cell.checkY + 1),
+              ]
+
+              kingsArray.forEach(elem => {
+                if (kingFigure?.canMove(elem)) kingCanMove = true
+              })
+
+              if (!kingCanMove) console.log('surrounded!!')
+
+              console.log(attackerName)
+              console.log(target)
+
+              /**
+               * if attackerName = Knight || Archer - can enemy attack target
+               * else - can enemy attack target or cell between target and king
+               */
+              
               alert('CHECK!')
             }
+
+
+            // this.board.getCell(Cell.checkX, Cell.checkY)
             // enemyKingCellAround.forEach(if canMove to)
             // enemyCellsArray.forEach(if canMove to checkersCell || to checkers attack path)
             // then - Alert 'Checkmate!'
