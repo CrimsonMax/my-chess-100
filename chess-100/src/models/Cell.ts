@@ -281,6 +281,7 @@ export class Cell {
         // set enemy's king status
         let kingFigure: Figure | null = null
         let kingCanMove: boolean = false
+        let killKiller = false
         // let attackerName = 
 
         for (let i = 0; i < this.board.cells.length; i++) {
@@ -313,14 +314,32 @@ export class Cell {
 
               if (!kingCanMove) console.log('surrounded!!')
 
+              // if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER) && !kingCanMove) console.log('checkmate!!')
+
               console.log(attackerName)
               console.log(target)
+
+              for (let i = 0; i < this.board.cells.length; i++) {
+                const row: Cell[] = this.board.cells[i]
+
+                for (let j = 0; j < row.length; j++) {
+                  const point: Cell = row[j]
+
+                  if (point.figure?.color === oppositeColor && point.figure.canMove(target)) {
+                    killKiller = true
+                  }
+                }
+              }
+
+              if (!kingCanMove && !killKiller && attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER)) {
+                alert('Checkmate!!')
+              }
 
               /**
                * if attackerName = Knight || Archer - can enemy attack target
                * else - can enemy attack target or cell between target and king
                */
-              
+
               alert('CHECK!')
             }
 
