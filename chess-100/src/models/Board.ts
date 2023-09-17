@@ -29,6 +29,8 @@ export class Board {
 
       this.cells.push(row)
     }
+
+    // console.log(this.cells.length)
   }
 
   public getCopyBoard(): Board {
@@ -56,10 +58,10 @@ export class Board {
 
   public getCell(x: number, y: number) {
     // if (this.cells[y][x]) return this.cells[y][x]
-    if (x > 9) x = 9
+    if (x > this.cells.length - 1) x = this.cells.length - 1
     if (x < 0) x = 0
-    if (y > 9) y = 9
-    if (y < 0) y = 9
+    if (y > this.cells.length - 1) y = this.cells.length - 1
+    if (y < 0) y = 0
 
     return this.cells[y][x]
   }
