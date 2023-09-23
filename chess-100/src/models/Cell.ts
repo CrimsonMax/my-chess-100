@@ -419,10 +419,43 @@ export class Cell {
                       }
                     }
                     
-                    console.log('linear')
+                    // console.log('linear')
                     // console.log(redCells2)
                   } else {
-                    console.log('diagonal')
+                    let attactX = target.x
+                    let attackY = target.y
+                    let kingX = kingCell.x
+                    let kingY = kingCell.y
+                    
+                    if (attactX > kingX && attackY < kingY) { // right-top
+
+                      for (let i = kingX + 1; i < attactX; i++) {
+                        redCells2.push(this.board.getCell(i, kingY - (i - kingX)))
+                      }
+
+                    } else if (attactX > kingX && attackY > kingY) { // right-bottom
+
+                      for (let i = kingX + 1; i < attactX; i++) {
+                        redCells2.push(this.board.getCell(i, kingY + (i - kingX)))
+                      }
+
+                    } else if (attactX < kingX && attackY > kingY) { // left-bottom
+
+                      for (let i = kingX - 1; i > attactX; i--) {
+                        redCells2.push(this.board.getCell(i, kingY + (kingX - i)))
+                      }
+
+                    } else { // left-top
+
+                      for (let i = kingX - 1; i > attactX; i--) {
+                        redCells2.push(this.board.getCell(i, kingY - (kingX - i)))
+                      }
+
+                    }
+
+                    // console.log(redCells2)
+                    
+                    // console.log('diagonal')
                   }
                   
                   for (let i = 0; i < defenceArray.length; i++) {
@@ -437,11 +470,11 @@ export class Cell {
                   // console.log(canMoveToRedCell)
 
                   if (!canMoveToRedCell) {
-                    console.log('Checkmate!!')
+                    alert('Checkmate!!')
                   }
                 }
-                console.log(kingCell)
-                console.log(target)
+                // console.log(kingCell)
+                // console.log(target)
               }
 
               /**
