@@ -3,7 +3,6 @@ import { Board } from "../models/Board"
 import CellComponent from "./CellComponent"
 import { Cell } from "../models/Cell"
 import { Player } from "../models/Player"
-import { FigureNames } from "../models/figures/Figure"
 import { Colors } from "../models/Colors"
 
 interface BoardProps {
@@ -16,77 +15,45 @@ interface BoardProps {
 
 const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion }) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
-  // const [cancel, setCancel] = useState<boolean>(false)
 
   useEffect(() => {
     highlightCells()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCell])
 
-  function click(cell: Cell) {
-    // const checkedKing = board.getCell(Cell.checkX, Cell.checkY).figure?.isChecked
-
-    // if (checkedKing) {
-
-    // }
+  function click(target: Cell) {
     // cancel choice
-    if (selectedCell === cell) {
+    if (selectedCell === target) {
       setSelectedCell(null)
       highlightCells()
       return
     }
 
-    // let a = selectedCell?.moveFigure(cell, thePromotion)
+    if (selectedCell && selectedCell !== target && selectedCell.figure?.canMove(target)) { // moving
+      let isValidMove = selectedCell.moveFigure(target, thePromotion)
 
-    // if (!a) return
-
-    if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
-      // const currentBoard = board.getCopyBoard()
-
-      // console.log('select destination')
-
-      let a = selectedCell.moveFigure(cell, thePromotion)
-
-      // cancel move
-      if (a) {
-        // setCancel(false)
+      if (isValidMove) {
         setSelectedCell(null)
         swapPlayer()
-      } else {
-        // setCancel(true)
-        // setSelectedCell(cell)
-        // setBoard(currentBoard)
-        // return
-      }
-
-      // selectedCell.moveFigure(cell, thePromotion)
-
-      // setSelectedCell(null)
-      // swapPlayer()
+      } 
 
       updateBoard()
-    } else {
-      // if (checkedKing && cell.figure?.name !== FigureNames.KING) return
+    } else { // selecting
 
-      if (cell.figure?.color === currentPlayer?.color) {
-        // console.log('select figure')
-        setSelectedCell(cell)
+      if (target.figure?.color === currentPlayer?.color) {
+        setSelectedCell(target)
       }
+
     }
   }
 
   function highlightCells() {
-    // console.log('click on cell')
     board.highlightCells(selectedCell)
     updateBoard()
   }
 
   function updateBoard() {
     const newBoard = board.getCopyBoard()
-
-    // console.log(cancel)
-
-    // if (cancel) return
 
     setBoard(newBoard)
   }

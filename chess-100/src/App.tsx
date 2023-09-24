@@ -16,12 +16,8 @@ function App() {
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
   const [promoActive, setPromoActive] = useState(false)
   const [promoColor, setPromoColor] = useState(Colors.WHITE)
-  const [promoName, setPromoName] = useState('')
   const [target, setTarget] = useState<Cell | null>(null)
   const [startCell, setStartCell] = useState<Cell | null>(null)
-  // const [targetY, setTargetY] = useState(0)
-  // const [promoCell, setPromoCell] = useState(Cell)
-  // const [promoTarget, setPromoTarget] = useState()
 
   useEffect(() => {
     restart()
@@ -50,21 +46,21 @@ function App() {
   return (
     <div className="App">
       {/* <Timer restart={restart} currentPlayer={currentPlayer}/> */}
-      
+
       <BoardComponent
         board={board}
         setBoard={setBoard}
         currentPlayer={currentPlayer}
         swapPlayer={swapPlayer}
-        thePromotion = {thePromotion}
+        thePromotion={thePromotion}
       />
 
-      <div>
-        <LostFigures title='White Army' figures={board.lostWhiteFigures}/>
-        <LostFigures title='Black Army' figures={board.lostBlackFigures}/>
+      <div className='losses'>
+        <LostFigures title='White Losses' figures={board.lostWhiteFigures} />
+        <LostFigures title='Black Losses' figures={board.lostBlackFigures} />
       </div>
 
-      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target} startCell={startCell}/>
+      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target} startCell={startCell} />
     </div>
   );
 }

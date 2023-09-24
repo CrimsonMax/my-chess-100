@@ -13,19 +13,12 @@
 }
 
 .board {
-  /* height: calc(64px * 10); */
-  /* width: calc(64px * 10); */
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
 }
 
 .cell {
-  /* height: 64px; */
-  /* width: 64px; */
   height: 3rem;
   width: 3rem;
 
@@ -35,11 +28,17 @@
 }
 
 .cell img {
-  /* height: 48px; */
-  /* width: 48px; */
   height: 2.5rem;
   width: 2.5rem;
   position: relative;
+  cursor: pointer;
+}
+
+.cell.red {
+  background-color: red;
+}
+
+.cell:has(.available) {
   cursor: pointer;
 }
 
@@ -103,11 +102,25 @@
 }
 
 .graveyard {
-  height: calc(50vh - 60px);
-  padding: 30px;
-  margin-left: 60px;
+  height: 13rem;
+  width: 10rem;
+  padding: 1rem;
+  margin-inline: 1rem;
   background-color: darkgray;
   overflow-x: overlay;
+}
+
+.graveyard > h3 {
+  margin-bottom: 1rem;
+}
+
+.rip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin: 0.2rem;
 }
 
 .promo-modal {
