@@ -22,7 +22,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
   }, [selectedCell])
 
   function click(target: Cell) {
-    // cancel choice
+    // cancel select
     if (selectedCell === target) {
       setSelectedCell(null)
       highlightCells()
@@ -38,7 +38,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
       } 
 
       updateBoard()
-    } else { // selecting
+    } else { // just selecting
 
       if (target.figure?.color === currentPlayer?.color) {
         setSelectedCell(target)
@@ -58,9 +58,11 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
     setBoard(newBoard)
   }
 
+  let headerClassname = `current-player ${currentPlayer?.color}`
+
   return (
     <>
-      <h3 className="current-player">Current Player {currentPlayer?.color}</h3>
+      <h3 className={headerClassname}>Current Player - {currentPlayer?.color}</h3>
       <div className="board">
         {board.cells.map((row, index) => (
           <React.Fragment key={index}>

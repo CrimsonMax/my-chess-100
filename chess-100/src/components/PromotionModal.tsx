@@ -20,8 +20,6 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell
   function setPromoFigure(name: string) {
     if (target === null || startCell === null) return
 
-    // console.log(startCell)
-
     switch (name) {
       case FigureNames.QUEEN:
         new Queen(color, startCell)
@@ -52,8 +50,6 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell
     setActive(false)
   }
 
-  /* set red cells */
-  
   return (
     <div className={active ? 'promo-modal active' : 'promo-modal'}>
       <div className="promo-background"></div>

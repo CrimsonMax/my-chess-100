@@ -10,6 +10,7 @@
   justify-content: center;
   align-items: center;
   background-color: darkolivegreen;
+  overflow: hidden;
 }
 
 .board {
@@ -91,21 +92,41 @@
 }
 
 .available {
-  height: 12px;
-  width: 12px;
+  height: 0.75rem;
+  width: 0.75rem;
   border-radius: 50%;
   background-color: darkblue;
 }
 
 .current-player {
-  margin: 1rem;
+  position: absolute;
+  position: absolute;
+  font-size: 1.5rem;
+  font-style: italic;
+  border: 0.5rem solid;
+  padding: 0.4rem;
+  border-radius: 1rem;
+  text-transform: capitalize;
+  z-index: 1;
+}
+.current-player.black {
+  top: 1rem;
+  border-color: black;
+  color: black;
+  background-color: transparent;
+}
+.current-player.white {
+  bottom: 1rem;
+  border-color: white;
+  color: white;
+  background-color: transparent;
 }
 
 .graveyard {
   height: 13rem;
   width: 10rem;
   padding: 1rem;
-  margin-inline: 1rem;
+  margin-left: 1rem;
   background-color: darkgray;
   overflow-x: overlay;
 }
@@ -133,6 +154,11 @@
   background-size: 2.5rem;
   background-position: center center;
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+.promo-modal .cell:hover {
+  transition: all 250ms;
+  opacity: .8;
 }
 
 .promo-background {
@@ -156,9 +182,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 0.25rem solid darkolivegreen;
+  border-radius: 1rem;
 }
 
 .promo-title {
+  font-size: 1.5rem;
   font-weight: 600;
   padding: 0.5rem;
 }
@@ -171,4 +200,43 @@
   flex-wrap: wrap;
   height: 6.5rem;
   width: 12rem;
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 12px;
+  }
+
+  .current-player.black {
+    top: 5rem;
+  }
+  .current-player.white {
+    bottom: 5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .losses {
+    display: none;
+  }
+
+  .current-player.black {
+    top: 8rem;
+  }
+  .current-player.white {
+    bottom: 8rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 400px) {
+  html {
+    font-size: 10px;
+  }
+
+  .current-player.black {
+    top: 0.5rem;
+  }
+  .current-player.white {
+    bottom: 0.5rem;
+  }
 }

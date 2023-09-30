@@ -14,7 +14,7 @@ function App() {
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE))
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK))
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
-  const [promoActive, setPromoActive] = useState(false)
+  const [promoActive, setPromoActive] = useState<boolean>(false)
   const [promoColor, setPromoColor] = useState(Colors.WHITE)
   const [target, setTarget] = useState<Cell | null>(null)
   const [startCell, setStartCell] = useState<Cell | null>(null)
