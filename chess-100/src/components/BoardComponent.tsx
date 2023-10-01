@@ -71,6 +71,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
                 click={click}
                 cell={cell}
                 key={cell.id}
+                code={`x${cell.x + 1} y${cell.y + 1}`}
                 selected={cell.x === selectedCell?.x && cell.y === selectedCell?.y}
               />
             )))}

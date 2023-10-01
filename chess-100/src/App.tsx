@@ -56,8 +56,8 @@ function App() {
       />
 
       <div className='losses'>
-        <LostFigures title='White Losses' figures={board.lostWhiteFigures} />
-        <LostFigures title='Black Losses' figures={board.lostBlackFigures} />
+        <LostFigures title='White Losses' figures={board.lostWhiteFigures} player={Colors.BLACK} />
+        <LostFigures title='Black Losses' figures={board.lostBlackFigures} player={Colors.WHITE} />
       </div>
 
       <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target} startCell={startCell} />

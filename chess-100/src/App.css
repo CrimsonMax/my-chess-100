@@ -34,13 +34,116 @@
   position: relative;
   cursor: pointer;
 }
-
 .cell.red {
   background-color: red;
 }
-
 .cell:has(.available) {
   cursor: pointer;
+}
+
+.x1:not(.y1):before {
+  content: "A";
+  position: absolute;
+  margin-right: 4.5rem;
+  font-weight: bold;
+  height: 3rem;
+  border-left: 1px solid black;
+  width: 1.5rem;
+  text-align: center;
+  line-height: 3rem;
+}
+.x2.y2::before {
+  content: "A";
+  position: absolute;
+  margin-right: 10.5rem;
+  margin-bottom: 6rem;
+  font-weight: bold;
+  height: 3rem;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-top-left-radius: .6rem;
+  padding-top: 3rem;
+  width: 1.5rem;
+  text-align: center;
+  line-height: 0rem;
+}
+.y1:not(.x10):before {
+  content: "A";
+  position: absolute;
+  margin-bottom: 4.5rem;
+  font-weight: bold;
+  height: 1.5rem;
+  border-top: 1px solid black;
+  width: 3rem;
+  text-align: center;
+  line-height: 1.5rem;
+}
+.x9.y2::after {
+  content: "A";
+  position: absolute;
+  margin-bottom: 10.5rem;
+  margin-left: 6rem;
+  font-weight: bold;
+  height: 1.5rem;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  border-top-right-radius: .6rem;
+  padding-right: 0rem;
+  width: 6rem;
+  text-align: center;
+  line-height: 1.5rem;
+}
+.x10:not(.y10):after {
+  content: "A";
+  position: absolute;
+  margin-left: 4.5rem;
+  font-weight: bold;
+  height: 3rem;
+  border-right: 1px solid black;
+  width: 1.5rem;
+  text-align: center;
+  line-height: 3rem;
+}
+.x9.y9::after {
+  content: "A";
+  position: absolute;
+  margin-left: 10.5rem;
+  margin-top: 6rem;
+  font-weight: bold;
+  height: 3rem;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  border-bottom-right-radius: .6rem;
+  padding-top: 3rem;
+  width: 1.5rem;
+  text-align: center;
+  line-height: 0rem;
+}
+.y10:not(.x1):after {
+  content: "A";
+  position: absolute;
+  margin-top: 4.5rem;
+  font-weight: bold;
+  height: 1.5rem;
+  border-bottom: 1px solid black;
+  width: 3rem;
+  text-align: center;
+  line-height: 1.5rem;
+}
+.x2.y9::after {
+  content: "A";
+  position: absolute;
+  margin-top: 10.5rem;
+  margin-right: 6rem;
+  font-weight: bold;
+  height: 1.5rem;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  border-bottom-left-radius: .6rem;
+  padding-right: 0rem;
+  width: 6rem;
+  text-align: center;
+  line-height: 1.5rem;
 }
 
 .black {
@@ -103,36 +206,46 @@
   position: absolute;
   font-size: 1.5rem;
   font-style: italic;
-  border: 0.5rem solid;
+  border: 2px solid;
   padding: 0.4rem;
   border-radius: 1rem;
   text-transform: capitalize;
   z-index: 1;
 }
 .current-player.black {
-  top: 1rem;
+  top: 0.4rem;
   border-color: black;
   color: black;
   background-color: transparent;
 }
 .current-player.white {
-  bottom: 1rem;
+  bottom: 0.4rem;
   border-color: white;
   color: white;
   background-color: transparent;
+}
+
+.losses {
+  margin-left: 3rem;
 }
 
 .graveyard {
   height: 13rem;
   width: 10rem;
   padding: 1rem;
-  margin-left: 1rem;
   background-color: darkgray;
   overflow-x: overlay;
 }
-
 .graveyard > h3 {
   margin-bottom: 1rem;
+}
+.graveyard.white {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.graveyard.black {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .rip {
@@ -158,7 +271,7 @@
 }
 .promo-modal .cell:hover {
   transition: all 250ms;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .promo-background {

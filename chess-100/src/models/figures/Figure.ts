@@ -26,6 +26,7 @@ export class Figure {
     this.isJumped = false
     this.isChecked = false
     this.isCheckmate = false
+    this.strength = 0
   }
 
   color: Colors
@@ -37,7 +38,8 @@ export class Figure {
   isJumped: boolean
   isChecked: boolean
   isCheckmate: boolean
-
+  strength: number
+  
   canMove(target: Cell): boolean {
     if (
       (target.figure?.color === this.color)

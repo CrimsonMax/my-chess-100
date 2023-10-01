@@ -10,6 +10,7 @@ export class Archer extends Figure {
 
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo
     this.name = FigureNames.ARCHER
+    this.strength = 3
   }
 
   canMove(target: Cell): boolean {
