@@ -17,6 +17,8 @@
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
+  border: 2rem solid black;
+  border-radius: 0.4rem;
 }
 
 .cell {
@@ -41,94 +43,138 @@
   cursor: pointer;
 }
 
+.x1.y2 {
+  counter-reset: west +1;
+}
 .x1:not(.y1):before {
-  content: "A";
+  counter-increment: west;
+  content: counter(west);
   position: absolute;
   margin-right: 4.5rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 3rem;
   border-left: 1px solid black;
   width: 1.5rem;
   text-align: center;
   line-height: 3rem;
+  background-color: bisque;
+  z-index: 1;
 }
 .x2.y2::before {
-  content: "A";
+  content: "1";
   position: absolute;
   margin-right: 10.5rem;
   margin-bottom: 6rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 3rem;
   border-left: 1px solid black;
   border-top: 1px solid black;
-  border-top-left-radius: .6rem;
+  border-top-left-radius: 0.6rem;
   padding-top: 3rem;
   width: 1.5rem;
   text-align: center;
   line-height: 0rem;
+  background-color: bisque;
+}
+
+.x1.y1 {
+  counter-reset: north;
 }
 .y1:not(.x10):before {
-  content: "A";
+  counter-increment: north;
+  content: counter(north, upper-alpha);
   position: absolute;
   margin-bottom: 4.5rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 1.5rem;
   border-top: 1px solid black;
   width: 3rem;
   text-align: center;
   line-height: 1.5rem;
+  background-color: bisque;
+  z-index: 1;
 }
 .x9.y2::after {
-  content: "A";
+  content: "J";
   position: absolute;
   margin-bottom: 10.5rem;
   margin-left: 6rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 1.5rem;
   border-right: 1px solid black;
   border-top: 1px solid black;
-  border-top-right-radius: .6rem;
+  border-top-right-radius: 0.6rem;
   padding-right: 0rem;
   width: 6rem;
   text-align: center;
   line-height: 1.5rem;
+  background-color: bisque;
+}
+
+.x10.y1 {
+  counter-reset: east;
 }
 .x10:not(.y10):after {
-  content: "A";
+  counter-increment: east;
+  content: counter(east);
   position: absolute;
   margin-left: 4.5rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 3rem;
   border-right: 1px solid black;
   width: 1.5rem;
   text-align: center;
   line-height: 3rem;
+  background-color: bisque;
+  z-index: 1;
 }
 .x9.y9::after {
-  content: "A";
+  content: "10";
   position: absolute;
   margin-left: 10.5rem;
   margin-top: 6rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 3rem;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
-  border-bottom-right-radius: .6rem;
+  border-bottom-right-radius: 0.6rem;
   padding-top: 3rem;
   width: 1.5rem;
   text-align: center;
   line-height: 0rem;
+  background-color: bisque;
+}
+
+.x2.y10 {
+  counter-reset: south +1;
 }
 .y10:not(.x1):after {
-  content: "A";
+  counter-increment: south;
+  content: counter(south, upper-alpha);
   position: absolute;
   margin-top: 4.5rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 1.5rem;
   border-bottom: 1px solid black;
   width: 3rem;
   text-align: center;
   line-height: 1.5rem;
+  background-color: bisque;
+  z-index: 1;
 }
 .x2.y9::after {
   content: "A";
@@ -136,14 +182,17 @@
   margin-top: 10.5rem;
   margin-right: 6rem;
   font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
   height: 1.5rem;
   border-left: 1px solid black;
   border-bottom: 1px solid black;
-  border-bottom-left-radius: .6rem;
+  border-bottom-left-radius: 0.6rem;
   padding-right: 0rem;
   width: 6rem;
   text-align: center;
   line-height: 1.5rem;
+  background-color: bisque;
 }
 
 .black {
@@ -206,27 +255,23 @@
   position: absolute;
   font-size: 1.5rem;
   font-style: italic;
-  border: 2px solid;
   padding: 0.4rem;
-  border-radius: 1rem;
   text-transform: capitalize;
   z-index: 1;
 }
 .current-player.black {
   top: 0.4rem;
-  border-color: black;
   color: black;
   background-color: transparent;
 }
 .current-player.white {
   bottom: 0.4rem;
-  border-color: white;
   color: white;
   background-color: transparent;
 }
 
 .losses {
-  margin-left: 3rem;
+  margin-left: 1rem;
 }
 
 .graveyard {
@@ -281,7 +326,8 @@
   height: 100vh;
   width: 100vw;
   background-color: black;
-  opacity: 0.6;
+  opacity: 0.8;
+  z-index: 1;
 }
 
 .promo-container {
@@ -295,8 +341,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 0.25rem solid darkolivegreen;
+  border: 0.25rem solid cadetblue;
   border-radius: 1rem;
+  z-index: 999;
 }
 
 .promo-title {
@@ -315,22 +362,28 @@
   width: 12rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
   html {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .current-player.black {
-    top: 5rem;
+    top: 2rem;
   }
   .current-player.white {
-    bottom: 5rem;
+    bottom: 2rem;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 670px) {
   .losses {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 10px;
   }
 
   .current-player.black {
@@ -341,15 +394,28 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 400px) {
+@media (orientation: portrait) and (max-width: 450px) {
+  .current-player.black {
+    top: 20%;
+  }
+  .current-player.white {
+    bottom: 20%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 450px) {
   html {
     font-size: 10px;
   }
 
+  .losses {
+    display: none;
+  }
+
   .current-player.black {
-    top: 0.5rem;
+    right: 0.2rem;
   }
   .current-player.white {
-    bottom: 0.5rem;
+    left: 0.2rem;
   }
 }
