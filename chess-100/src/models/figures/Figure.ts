@@ -1,5 +1,4 @@
 import logo from '../../assets/black-archer.png'
-// import { Board } from '../Board';
 import { Cell } from '../Cell';
 import { Colors } from '../Colors'
 
@@ -41,48 +40,14 @@ export class Figure {
   strength: number
   
   canMove(target: Cell): boolean {
-    if (
-      (target.figure?.color === this.color)
-      ||
-      (this.name === FigureNames.KING && target.redCell)
-    ) return false
-
-    // for (let i = 0; i < this.board.cells.length; i++) {
-    //   const row: Cell[] = this.board.cells[i]
-
-    //   for (let j = 0; j < row.length; j++) {
-    //     const point: Cell = row[j]
-
-    //     if (point.figure?.name === FigureNames.KING && point.figure.color === currentColor && point.redCell) {
-    //       point.figure.isChecked = true
-    //       Cell.checkX = point.figure.cell.x
-    //       Cell.checkY = point.figure.cell.y
-    //       // console.log('My King is checked')
-
-    //       // cancel move
-    //       // if (this.figure.name === FigureNames.PAWN) {
-    //       //   this.figure.cell.setFigure(this.figure)
-    //       //   target.figure = null
-    //       //   return
-    //       // }
-
-    //       // debugger
-    //       this.figure = currentFigure
-    //       this.figure.cell.setFigure(this.figure)
-    //       target.figure = null
-    //       // target = this.figure.cell
-    //       // status = cancel
-    //       return false
-    //     }
-    //   }
-    // }
+    if ((target.figure?.color === this.color) || (this.name === FigureNames.KING && target.redCell)) {
+      return false
+    }
 
     return true
   }
 
   canDefence(target: Cell): boolean {
-    // if ((target.figure?.color === this.color)) return true
-
     return true
   }
 }

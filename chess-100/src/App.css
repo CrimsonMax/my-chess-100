@@ -271,26 +271,22 @@
 }
 
 .losses {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
   margin-left: 1rem;
 }
 
 .graveyard {
-  height: 13rem;
+  height: 11rem;
   width: 10rem;
   padding: 1rem;
-  background-color: darkgray;
+  background-color: transparent;
   overflow-x: overlay;
 }
 .graveyard > h3 {
-  margin-bottom: 1rem;
-}
-.graveyard.white {
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-}
-.graveyard.black {
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid black;
 }
 
 .rip {

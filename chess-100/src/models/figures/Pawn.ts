@@ -28,7 +28,6 @@ export class Pawn extends Figure {
       &&
       this.cell.board.getCell(target.x, target.y).isEmpty()
     ) {
-
       return true
     }
 
@@ -47,7 +46,6 @@ export class Pawn extends Figure {
         )
       )
     ) {
-
       return true
     }
 

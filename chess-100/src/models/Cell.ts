@@ -1,7 +1,6 @@
 import { Board } from "./Board"
 import { Colors } from "./Colors"
 import { Figure, FigureNames } from "./figures/Figure"
-// import { Rook } from "./figures/Rook"
 
 export class Cell {
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
@@ -39,24 +38,22 @@ export class Cell {
     figure.color === Colors.BLACK ? this.board.lostBlackFigures.push(figure) : this.board.lostWhiteFigures.push(figure)
   }
 
+  checkAllCells(fn: Function, elem: Figure | null = null) {
+    for (let i = 0; i < this.board.cells.length; i++) {
+      const row: Cell[] = this.board.cells[i]
+
+      for (let j = 0; j < row.length; j++) {
+        const point: Cell = row[j]
+
+        fn(point, elem)
+      }
+    }
+  }
+
   moveFigure(target: Cell, isPromo?: (isModal: boolean, color: Colors, promoCell: Cell, startCell: Cell) => void): boolean {
-    // !isPromo && console.log('promo')
-    // console.log(isPromo)
     if (this.figure && (this.figure?.canMove(target) || !isPromo)) {
-      // Kill the King
-      // if (target.figure?.name === FigureNames.KING) alert(`${this.figure.color} win!!`)
-
-      // let forbiddenCell: Boolean = false
-
-      // if (this.figure.name === FigureNames.KING && target.redCell) {
-      //   forbiddenCell = true
-      // }
-
       // Eating
       let killedEnemy = target.figure
-      // console.log(killedEnemy)
-      // if (target.figure) this.addLostFigure(target.figure)
-      // if (killedEnemy) this.addLostFigure(killedEnemy)
 
       // Castling
       if (this.figure.name === FigureNames.KING) {
@@ -113,88 +110,106 @@ export class Cell {
         let currentFigure: Figure = this.figure
         let currentCell: Cell = this.figure.cell
         let currentFirstStep: boolean = this.figure.isFirstStep
-        // console.log(this.figure.cell)
+
         target.setFigure(this.figure)
-        // console.log(this.figure.cell)
         this.figure.isFirstStep = false
 
         // Check
         let currentColor: Colors = this.figure.color
         let oppositeColor: Colors = currentColor === Colors.WHITE ? Colors.BLACK : Colors.WHITE
-        const redCells: Array<Cell> = []
         const redArmy: Array<Figure> = []
-
         let attackerName: FigureNames = this.figure.name
 
         this.figure = null
-        // console.log(currentFigure)
 
         // set enemy's red cells
-        for (let i = 0; i < this.board.cells.length; i++) {
-          const row: Cell[] = this.board.cells[i]
+        // for (let i = 0; i < this.board.cells.length; i++) {
+        //   const row: Cell[] = this.board.cells[i]
 
-          for (let j = 0; j < row.length; j++) {
-            const point: Cell = row[j]
+        //   for (let j = 0; j < row.length; j++) {
+        //     const point: Cell = row[j]
 
-            // clear red cells
-            if (point.redCell) point.redCell = false
+        //     // clear red cells
+        //     if (point.redCell) point.redCell = false
 
-            // if (point?.figure?.color === currentColor) {
-            //   redArmy.push(point.figure)
-            // }
+        //     if (point?.figure?.color === oppositeColor) {
+        //       redArmy.push(point.figure)
+        //     }
+        //   }
+        // }
+        //////////////
+        // set enemy's red cells
+        const setEnemyRedArmy = (cell: Cell) => {
+          if (cell.redCell) cell.redCell = false
 
-            if (point?.figure?.color === oppositeColor) {
-              redArmy.push(point.figure)
-            }
-
-            // console.log(point)
-
-            ////////////////////////////////
-
-            // point.available = !!this.figure.canMove(point)
-
-            // if (point.available && point.figure?.name === FigureNames.KING && point.figure !== this.figure) {
-            //   point.figure.isChecked = true
-            //   Cell.checkX = point.figure.cell.x
-            //   Cell.checkY = point.figure.cell.y
-            // }
+          if (cell?.figure?.color === oppositeColor) {
+            redArmy.push(cell.figure)
           }
         }
+        this.checkAllCells(setEnemyRedArmy)
+        /////////////
 
         const enemyRedCells: Array<Cell> = []
 
-        // if (killedEnemy){
-        //   redArmy.push(killedEnemy)
-        // }
+        //////////////////
+        const setEnemyRedCells = (cell: Cell, figure: Figure) => {
+          if (figure.name !== FigureNames.PAWN && figure.canDefence(cell) && cell.figure !== figure) {
+            cell.redCell = true
+          }
+
+          if (figure.name === FigureNames.PAWN) {
+            if (figure.cell.x !== 0) this.board.getCell(figure.cell.x - 1, oppositeColor === Colors.WHITE ? figure.cell.y - 1 : figure.cell.y + 1).redCell = true
+            if (figure.cell.x < 9) this.board.getCell(figure.cell.x + 1, oppositeColor === Colors.WHITE ? figure.cell.y - 1 : figure.cell.y + 1).redCell = true
+          }
+        }
+        /////////////////
 
         redArmy.forEach(elem => {
-          for (let i = 0; i < this.board.cells.length; i++) {
-            const row: Cell[] = this.board.cells[i]
+          // for (let i = 0; i < this.board.cells.length; i++) {
+          //   const row: Cell[] = this.board.cells[i]
 
-            for (let j = 0; j < row.length; j++) {
-              const point: Cell = row[j]
+          //   for (let j = 0; j < row.length; j++) {
+          //     const point: Cell = row[j]
 
-              if (elem.name !== FigureNames.PAWN && elem.canDefence(point) && point.figure !== elem) {
-                point.redCell = true
+          //     if (elem.name !== FigureNames.PAWN && elem.canDefence(point) && point.figure !== elem) {
+          //       point.redCell = true
+          //     }
 
-                // console.log(killedEnemy)
-                // console.log(elem)
-                // debugger
-                // if (elem === killedEnemy) {
-                //   killedCells.push(point)
-                // }
-              }
-
-              if (elem.name === FigureNames.PAWN) {
-                if (elem.cell.x !== 0) this.board.getCell(elem.cell.x - 1, oppositeColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
-                if (elem.cell.x < 9) this.board.getCell(elem.cell.x + 1, oppositeColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
-              }
-
-              // point.available = !!figure.canMove(point)
-            }
-          }
+          //     if (elem.name === FigureNames.PAWN) {
+          //       if (elem.cell.x !== 0) this.board.getCell(elem.cell.x - 1, oppositeColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
+          //       if (elem.cell.x < 9) this.board.getCell(elem.cell.x + 1, oppositeColor === Colors.WHITE ? elem.cell.y - 1 : elem.cell.y + 1).redCell = true
+          //     }
+          //   }
+          // }
+          this.checkAllCells(setEnemyRedCells, elem)
         })
+
         // set current king status
+        ///////////////////////
+        const setCurrentKingStatus = (point: Cell) => {
+          if (point.figure?.name === FigureNames.KING && point.figure.color === currentColor && point.redCell) {
+            point.figure.isChecked = true
+            Cell.checkX = point.figure.cell.x
+            Cell.checkY = point.figure.cell.y
+
+            this.figure = currentFigure
+            currentCell.setFigure(this.figure)
+            this.figure.isFirstStep = currentFirstStep
+
+            if (killedEnemy) {
+              target.figure = killedEnemy
+            } else {
+              target.figure = null
+            }
+
+            return false
+          }
+        }
+        // this.checkAllCells(setCurrentKingStatus)
+        ///////////////////////
+        /**
+         * here forbidden moves broking
+         */
         for (let i = 0; i < this.board.cells.length; i++) {
           const row: Cell[] = this.board.cells[i]
 
@@ -205,46 +220,35 @@ export class Cell {
               point.figure.isChecked = true
               Cell.checkX = point.figure.cell.x
               Cell.checkY = point.figure.cell.y
-              // console.log('My King is checked')
 
-              // cancel move
-              // if (this.figure.name === FigureNames.PAWN) {
-              //   this.figure.cell.setFigure(this.figure)
-              //   target.figure = null
-              //   return
-              // }
-
-              // debugger
               this.figure = currentFigure
               currentCell.setFigure(this.figure)
-              // target.figure?.cell = null
               this.figure.isFirstStep = currentFirstStep
-              // console.log(target.figure?.cell)
-              // console.log(target.figure)
-              // killedEnemy ? target.figure = killedEnemy : target.figure = null
 
               if (killedEnemy) {
                 target.figure = killedEnemy
-                // console.log(killedCells)
-                // killedCells.forEach(elem => elem.redCell = true)
               } else {
                 target.figure = null
               }
 
-              /* remark red cells if killedEnemy */
-
-              // this.figure = null
-              // target = this.figure.cell
-              // status = cancel
               return false
             }
           }
         }
 
-        // console.log(redCells)
-
         // set my red cells
         redArmy.length = 0
+        ///////////////
+        const setMyRedCells = (cell: Cell) => {
+          // clear red cells
+          if (cell.redCell) cell.redCell = false
+
+          if (cell?.figure?.color === currentColor) {
+            redArmy.push(cell.figure)
+          }
+        }
+        // this.checkAllCells(setMyRedCells)
+        ///////////////
 
         for (let i = 0; i < this.board.cells.length; i++) {
           const row: Cell[] = this.board.cells[i]
@@ -260,6 +264,20 @@ export class Cell {
             }
           }
         }
+        ////////////////////
+        const setMyRedArmy = (point: Cell, figure: Figure) => {
+          if (figure.name !== FigureNames.PAWN && figure.canDefence(point) && point.figure !== figure) {
+            point.redCell = true
+            enemyRedCells.push(point)
+          }
+
+          if (figure.name === FigureNames.PAWN) {
+            if (figure.cell.x !== 0) this.board.getCell(figure.cell.x - 1, currentColor === Colors.WHITE ? figure.cell.y - 1 : figure.cell.y + 1).redCell = true
+            if (figure.cell.x < 9) this.board.getCell(figure.cell.x + 1, currentColor === Colors.WHITE ? figure.cell.y - 1 : figure.cell.y + 1).redCell = true
+          }
+        }
+        //////////////////////
+
         redArmy.forEach(elem => {
           for (let i = 0; i < this.board.cells.length; i++) {
             const row: Cell[] = this.board.cells[i]
@@ -278,16 +296,150 @@ export class Cell {
               }
             }
           }
+          // this.checkAllCells(setMyRedArmy, elem)
         })
+
         // set enemy's king status
         let kingFigure: Figure | null = null
         let kingCanMove: boolean = false
         let killKiller: boolean = false
-        let canDefenceKing: boolean = false
         const defenceArray: Figure[] = []
         const redCells2: Cell[] = []
-        let kingCell: Cell | null = null 
-        // let attackerName = 
+        let kingCell: Cell | null = null
+
+        //////////////////////////
+        const setDefendStatus = (cell: Cell) => {
+          if (cell.figure?.color === oppositeColor && cell.figure.canMove(target)) {
+            killKiller = true
+          }
+
+          if (cell.figure?.color === oppositeColor) {
+            defenceArray.push(cell.figure)
+          }
+        }
+
+        const setEnemyKingStatus = (point: Cell) => {
+          if (point.figure?.name === FigureNames.KING && point.figure.color === oppositeColor && point.redCell) {
+            point.figure.isChecked = true
+            Cell.checkX = point.figure.cell.x
+            Cell.checkY = point.figure.cell.y
+
+            kingFigure = point.figure
+            kingCell = this.board.getCell(Cell.checkX, Cell.checkY)
+
+            const kingsArray: Cell[] = [
+              this.board.getCell(Cell.checkX, Cell.checkY + 1),
+              this.board.getCell(Cell.checkX, Cell.checkY - 1),
+              this.board.getCell(Cell.checkX + 1, Cell.checkY),
+              this.board.getCell(Cell.checkX - 1, Cell.checkY),
+              this.board.getCell(Cell.checkX + 1, Cell.checkY + 1),
+              this.board.getCell(Cell.checkX - 1, Cell.checkY - 1),
+              this.board.getCell(Cell.checkX + 1, Cell.checkY - 1),
+              this.board.getCell(Cell.checkX - 1, Cell.checkY + 1),
+            ]
+
+            kingsArray.forEach(elem => {
+              if (kingFigure?.canMove(elem)) kingCanMove = true
+            })
+
+            this.checkAllCells(setDefendStatus)
+
+            let canMoveToRedCell = false
+
+            if (!kingCanMove && !killKiller) {
+
+              if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER)) {
+                alert('Checkmate!!')
+              } else {
+
+                if (kingCell.x === target.x || kingCell.y === target.y) {
+                  let cellEqual = null
+                  let start = null
+                  let end = null
+
+                  if (kingCell.x === target.x) {
+                    cellEqual = target.x
+
+                    if (target.y > kingCell.y) {
+                      start = target.y
+                      end = kingCell.y
+                    } else {
+                      start = kingCell.y
+                      end = target.y
+                    }
+
+                    for (let i = end + 1; i < start; i++) {
+                      redCells2.push(this.board.getCell(cellEqual, i))
+                    }
+                  } else {
+                    cellEqual = target.y
+
+                    if (target.x > kingCell.x) {
+                      start = target.x
+                      end = kingCell.x
+                    } else {
+                      start = kingCell.x
+                      end = target.x
+                    }
+
+                    for (let i = end + 1; i < start; i++) {
+                      redCells2.push(this.board.getCell(i, cellEqual))
+                    }
+                  }
+                } else {
+                  let attactX = target.x
+                  let attackY = target.y
+                  let kingX = kingCell.x
+                  let kingY = kingCell.y
+
+                  if (attactX > kingX && attackY < kingY) { // right-top
+
+                    for (let i = kingX + 1; i < attactX; i++) {
+                      redCells2.push(this.board.getCell(i, kingY - (i - kingX)))
+                    }
+
+                  } else if (attactX > kingX && attackY > kingY) { // right-bottom
+
+                    for (let i = kingX + 1; i < attactX; i++) {
+                      redCells2.push(this.board.getCell(i, kingY + (i - kingX)))
+                    }
+
+                  } else if (attactX < kingX && attackY > kingY) { // left-bottom
+
+                    for (let i = kingX - 1; i > attactX; i--) {
+                      redCells2.push(this.board.getCell(i, kingY + (kingX - i)))
+                    }
+
+                  } else { // left-top
+
+                    for (let i = kingX - 1; i > attactX; i--) {
+                      redCells2.push(this.board.getCell(i, kingY - (kingX - i)))
+                    }
+
+                  }
+                }
+
+                for (let i = 0; i < defenceArray.length; i++) {
+                  redCells2.forEach(elem => {
+                    if (defenceArray[i].canMove(elem) && !canMoveToRedCell) {
+                      canMoveToRedCell = true
+                      return
+                    }
+                  })
+                }
+
+                if (!canMoveToRedCell) {
+                  alert('Checkmate!!')
+                }
+              }
+            }
+
+            alert('CHECK!')
+          }
+        }
+
+        // this.checkAllCells(setEnemyKingStatus)
+        //////////////////////////
 
         for (let i = 0; i < this.board.cells.length; i++) {
           const row: Cell[] = this.board.cells[i]
@@ -318,27 +470,11 @@ export class Cell {
                 if (kingFigure?.canMove(elem)) kingCanMove = true
               })
 
-              if (!kingCanMove) console.log('surrounded!!')
-
-              // if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER) && !kingCanMove) console.log('checkmate!!')
-
-              
-
               for (let i = 0; i < this.board.cells.length; i++) {
                 const row: Cell[] = this.board.cells[i]
 
                 for (let j = 0; j < row.length; j++) {
                   const point: Cell = row[j]
-
-                  // if (point.figure?.color === oppositeColor) {
-                  //   let canFigure = point.figure
-
-                  //   enemyRedCells.forEach(elem => {
-                  //     if (canFigure.canMove(elem)) {
-                  //       canDefenceKing = true
-                  //     }
-                  //   })
-                  // }
 
                   if (point.figure?.color === oppositeColor && point.figure.canMove(target)) {
                     killKiller = true
@@ -347,31 +483,10 @@ export class Cell {
                   if (point.figure?.color === oppositeColor) {
                     defenceArray.push(point.figure)
                   }
-
-                  // if (point.redCell) {
-                  //   redCells2.push(point)
-                  // }
-
-                  // if (point.figure?.canDefence())
                 }
               }
 
-              // if (defenceArray.length > 0) {
-              //   defenceArray.forEach(figure => {
-              //     enemyRedCells.forEach(cell => {
-              //       if (figure.canMove(cell)) canDefenceKing = true
-              //     })
-              //   })
-              // }
               let canMoveToRedCell = false
-
-              // for (let i = 0; i < defenceArray.length; i++) {
-
-              // }
-              /**
-               * if x == x || y == y => attact linear 
-               * else diagonal
-               */
 
               if (!kingCanMove && !killKiller) {
 
@@ -383,12 +498,10 @@ export class Cell {
                     let cellEqual = null
                     let start = null
                     let end = null
-                    
+
                     if (kingCell.x === target.x) {
                       cellEqual = target.x
-                      // target.y > kingCell.y
-                      // let step = target.y > kingCell.y ? 1 : -1
-                      // step = 1
+
                       if (target.y > kingCell.y) {
                         start = target.y
                         end = kingCell.y
@@ -396,10 +509,7 @@ export class Cell {
                         start = kingCell.y
                         end = target.y
                       }
-                      // let start = step > 0 ? target.y : kingCell.y
-                      // start = target.y (6)
-                      // end = kingCell.y (0)
-                      // debugger
+
                       for (let i = end + 1; i < start; i++) {
                         redCells2.push(this.board.getCell(cellEqual, i))
                       }
@@ -418,15 +528,12 @@ export class Cell {
                         redCells2.push(this.board.getCell(i, cellEqual))
                       }
                     }
-                    
-                    // console.log('linear')
-                    // console.log(redCells2)
                   } else {
                     let attactX = target.x
                     let attackY = target.y
                     let kingX = kingCell.x
                     let kingY = kingCell.y
-                    
+
                     if (attactX > kingX && attackY < kingY) { // right-top
 
                       for (let i = kingX + 1; i < attactX; i++) {
@@ -452,12 +559,8 @@ export class Cell {
                       }
 
                     }
-
-                    // console.log(redCells2)
-                    
-                    // console.log('diagonal')
                   }
-                  
+
                   for (let i = 0; i < defenceArray.length; i++) {
                     redCells2.forEach(elem => {
                       if (defenceArray[i].canMove(elem) && !canMoveToRedCell) {
@@ -467,54 +570,22 @@ export class Cell {
                     })
                   }
 
-                  // console.log(canMoveToRedCell)
-
                   if (!canMoveToRedCell) {
                     alert('Checkmate!!')
                   }
                 }
-                // console.log(kingCell)
-                // console.log(target)
               }
 
-              /**
-               * if attackerName = Knight || Archer - can enemy attack target
-               * else - can enemy attack target or cell between target and king
-               */
-              
-
               alert('CHECK!')
-              // console.log(kingCell)
-              // console.log(target)
-              // console.log(enemyRedCells)
-              // console.log(redArmy)
-              // console.log(canDefenceKing)
             }
-
-
-            // this.board.getCell(Cell.checkX, Cell.checkY)
-            // enemyKingCellAround.forEach(if canMove to)
-            // enemyCellsArray.forEach(if canMove to checkersCell || to checkers attack path)
-            // then - Alert 'Checkmate!'
           }
         }
 
-        // console.log(redArmy)
-
         const checkedKing = this.board.getCell(Cell.checkX, Cell.checkY).figure
-
-        // console.log(checkedKing?.isChecked)
 
         if (checkedKing?.isChecked && checkedKing.color === currentColor) {
           checkedKing.isChecked = false
         }
-
-        // if (this.figure.name === FigureNames.KING && this.figure.isChecked) {
-        //   this.figure.isChecked = false
-        // }
-
-        // // Eating
-        // if (target.figure?.color === oppositeColor) this.addLostFigure(target.figure)
       }
 
 
@@ -534,17 +605,18 @@ export class Cell {
     return false
   }
 
-  // canCastleLeft(): boolean {
-  //   const leftRook = this.figure?.color === Colors.WHITE ? this.board.getCell(0, 0).figure : this.board.getCell(0, 9).figure
+  isSafeHorizontal(target: Cell): boolean {
+    if (this.y !== target.y) return false
 
-  //   return leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
-  // }
+    const min = Math.min(this.x, target.x)
+    const max = Math.max(this.x, target.x)
 
-  // canCastleRight(): boolean {
-  //   const rightRook = this.figure?.color === Colors.WHITE ? this.board.getCell(9, 0).figure : this.board.getCell(9, 9).figure
+    for (let x = min + 1; x < max; x++) {
+      if (this.board.getCell(x, this.y).redCell) return false
+    }
 
-  //   return rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
-  // }
+    return true
+  }
 
   isEmptyHorizontal(target: Cell): boolean {
     if (this.y !== target.y) return false

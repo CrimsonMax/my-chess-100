@@ -10,6 +10,7 @@ export class King extends Figure {
 
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo
     this.name = FigureNames.KING
+    this.strength = 100
   }
 
   canMove(target: Cell): boolean {
@@ -27,7 +28,7 @@ export class King extends Figure {
     const leftCastle = leftRook?.name === FigureNames.ROOK && leftRook.isFirstStep
     const rightCastle = rightRook?.name === FigureNames.ROOK && rightRook.isFirstStep
 
-    if (this.isFirstStep && this.cell.isEmptyHorizontal(target) && !this.isChecked) {
+    if (this.isFirstStep && this.cell.isEmptyHorizontal(target) && this.cell.isSafeHorizontal(target) && !this.isChecked) {
       return (dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1) || (leftCastle && dxLeft === 0 && dy === 0) || (rightCastle && dxRigth === 0 && dy === 0)
     }
 
