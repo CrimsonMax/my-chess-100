@@ -43,6 +43,7 @@
   cursor: pointer;
 }
 
+/* Coordinates */
 .x1.y2 {
   counter-reset: west +1;
 }
@@ -80,7 +81,6 @@
   line-height: 0rem;
   background-color: bisque;
 }
-
 .x1.y1 {
   counter-reset: north;
 }
@@ -118,7 +118,6 @@
   line-height: 1.5rem;
   background-color: bisque;
 }
-
 .x10.y1 {
   counter-reset: east;
 }
@@ -156,7 +155,6 @@
   line-height: 0rem;
   background-color: bisque;
 }
-
 .x2.y10 {
   counter-reset: south +1;
 }
@@ -207,6 +205,7 @@
   background-color: cadetblue;
 }
 
+/* Figures */
 .queen.black {
   background-image: url(assets/black-queen.png);
 }
@@ -222,7 +221,6 @@
 .bishop.black {
   background-image: url(assets/black-bishop.png);
 }
-
 .queen.white {
   background-image: url(assets/white-queen.png);
 }
@@ -298,6 +296,7 @@
   margin: 0.2rem;
 }
 
+/* Promo modal */
 .promo-modal {
   display: none;
 }
@@ -356,6 +355,56 @@
   flex-wrap: wrap;
   height: 6.5rem;
   width: 12rem;
+}
+
+/* Check modal */
+.check-modal {
+  display: none;
+}
+.check-modal.active {
+  display: block;
+}
+
+.check-background {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  opacity: 0.2;
+  z-index: 1;
+}
+
+.check-container {
+  height: fit-content;
+  width: fit-content;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 0.25rem solid red;
+  border-radius: 1rem;
+  z-index: 999;
+}
+.check-container.checkmate {
+  border: 0.25rem solid goldenrod;
+}
+
+.check-title {
+  font-size: 2rem;
+  font-weight: 600;
+  font-style: italic;
+  padding: 1rem;
+  color: blue;
+  text-transform: uppercase;
+}
+.checkmate .check-title {
+  color: red;
 }
 
 @media (max-width: 760px) {

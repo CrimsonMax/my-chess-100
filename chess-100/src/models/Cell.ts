@@ -1,3 +1,4 @@
+import { PromoModal } from "../App"
 import { Board } from "./Board"
 import { Colors } from "./Colors"
 import { Figure, FigureNames } from "./figures/Figure"
@@ -17,6 +18,7 @@ export class Cell {
   readonly x: number
   readonly y: number
   readonly color: Colors
+
   figure: Figure | null
   board: Board
   available: boolean // check if can be moved
@@ -50,7 +52,7 @@ export class Cell {
     }
   }
 
-  moveFigure(target: Cell, isPromo?: (isModal: boolean, color: Colors, promoCell: Cell, startCell: Cell) => void): boolean {
+  moveFigure(target: Cell, isPromo?: (modalParams: PromoModal) => void, isCheck?: (check: boolean) => void): boolean {
     if (this.figure && (this.figure?.canMove(target) || !isPromo)) {
       let checkMate: boolean = false
 
@@ -107,7 +109,9 @@ export class Cell {
 
         this.figure = null
         promoCell.figure = null
-        isPromo(true, color, promoCell, startCell)
+
+        // isPromo(true, color, promoCell, startCell)
+        isPromo({active: true, color, promoCell, startCell})
       } else {
         let currentFigure: Figure = this.figure
         let currentCell: Cell = this.figure.cell
@@ -234,7 +238,7 @@ export class Cell {
             if (!kingCanMove && !killKiller) {
 
               if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER)) {
-                alert('Checkmate!!')
+                isCheck && isCheck(false)
               } else {
 
                 if (kingCell.x === target.x || kingCell.y === target.y) {
@@ -314,13 +318,13 @@ export class Cell {
                 }
 
                 if (!canMoveToRedCell) {
-                  alert('Checkmate!!')
                   checkMate = true
+                  isCheck && isCheck(false)
                 }
               }
             }
 
-            if (!checkMate) alert('CHECK!')
+            if (!checkMate) isCheck && isCheck(true)
           }
         }
 

@@ -4,16 +4,18 @@ import CellComponent from "./CellComponent"
 import { Cell } from "../models/Cell"
 import { Player } from "../models/Player"
 import { Colors } from "../models/Colors"
+import { PromoModal } from "../App"
 
 interface BoardProps {
-  board: Board,
-  setBoard: (board: Board) => void,
-  currentPlayer: Player | null,
-  swapPlayer: () => void,
-  thePromotion: (isModal: boolean, color: Colors, promoCell: Cell, startCell: Cell) => void,
+  board: Board
+  setBoard: (board: Board) => void
+  currentPlayer: Player | null
+  swapPlayer: () => void
+  thePromotion: (modalParams: PromoModal) => void
+  theCheck: (check: boolean) => void
 }
 
-const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion }) => {
+const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, thePromotion, theCheck }) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
     }
 
     if (selectedCell && selectedCell !== target && selectedCell.figure?.canMove(target)) { // moving
-      let isValidMove = selectedCell.moveFigure(target, thePromotion)
+      let isValidMove = selectedCell.moveFigure(target, thePromotion, theCheck)
 
       if (isValidMove) {
         setSelectedCell(null)

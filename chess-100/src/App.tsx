@@ -8,16 +8,33 @@ import LostFigures from './components/lostFigures';
 import Timer from './components/Timer';
 import PromotionModal from './components/PromotionModal';
 import { Cell } from './models/Cell';
+import CheckModal from './components/CheckModal';
+
+export interface PromoModal {
+  active: boolean
+  color: Colors
+  startCell: Cell
+  promoCell: Cell
+}
+
+// export interface CheckModal {
+//   check: boolean
+//   checkmate: boolean
+// }
 
 function App() {
   const [board, setBoard] = useState(new Board())
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE))
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK))
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
+
   const [promoActive, setPromoActive] = useState<boolean>(false)
   const [promoColor, setPromoColor] = useState(Colors.WHITE)
   const [target, setTarget] = useState<Cell | null>(null)
   const [startCell, setStartCell] = useState<Cell | null>(null)
+
+  const [check, setCheck] = useState<boolean>(false)
+  const [checkActive, setCheckActive] = useState<boolean>(false)
 
   useEffect(() => {
     restart()
@@ -36,11 +53,17 @@ function App() {
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer)
   }
 
-  function thePromotion(active: boolean, color: Colors, promoCell: Cell, startCell: Cell) {
-    setPromoColor(color)
-    setTarget(promoCell)
-    setStartCell(startCell)
-    setPromoActive(active)
+  function thePromotion(modalParams: PromoModal) {
+    setPromoActive(modalParams.active)
+    setPromoColor(modalParams.color)
+    setStartCell(modalParams.startCell)
+    setTarget(modalParams.promoCell)
+  }
+
+  function theCheck(check: boolean) {
+    setCheck(check)
+    setCheckActive(true)
+    // setCheckmate(modalParams.checkmate)
   }
 
   return (
@@ -53,6 +76,7 @@ function App() {
         currentPlayer={currentPlayer}
         swapPlayer={swapPlayer}
         thePromotion={thePromotion}
+        theCheck={theCheck}
       />
 
       <div className='losses'>
@@ -60,7 +84,19 @@ function App() {
         <LostFigures title='Black Losses' figures={board.lostBlackFigures} player={Colors.WHITE} />
       </div>
 
-      <PromotionModal active={promoActive} setActive={setPromoActive} color={promoColor} target={target} startCell={startCell} />
+      <PromotionModal
+        active={promoActive}
+        setActive={setPromoActive}
+        color={promoColor}
+        target={target}
+        startCell={startCell}
+      />
+
+      <CheckModal
+        active={checkActive}
+        setActive={setCheckActive}
+        check={check}
+      />
     </div>
   );
 }
