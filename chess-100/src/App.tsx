@@ -4,23 +4,11 @@ import BoardComponent from './components/BoardComponent';
 import { Board } from './models/Board';
 import { Player } from './models/Player';
 import { Colors } from './models/Colors';
-import LostFigures from './components/lostFigures';
 import Timer from './components/Timer';
-import PromotionModal from './components/PromotionModal';
+import PromotionModal, { PromoModal } from './components/PromotionModal';
 import { Cell } from './models/Cell';
 import CheckModal from './components/CheckModal';
-
-export interface PromoModal {
-  active: boolean
-  color: Colors
-  startCell: Cell
-  promoCell: Cell
-}
-
-// export interface CheckModal {
-//   check: boolean
-//   checkmate: boolean
-// }
+import LostFigures from './components/LostFigures';
 
 function App() {
   const [board, setBoard] = useState(new Board())
@@ -63,7 +51,6 @@ function App() {
   function theCheck(check: boolean) {
     setCheck(check)
     setCheckActive(true)
-    // setCheckmate(modalParams.checkmate)
   }
 
   return (
@@ -90,6 +77,7 @@ function App() {
         color={promoColor}
         target={target}
         startCell={startCell}
+        isCheck={theCheck}
       />
 
       <CheckModal

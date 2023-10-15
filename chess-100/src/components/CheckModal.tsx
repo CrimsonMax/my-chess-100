@@ -1,12 +1,4 @@
 import { FC } from 'react'
-import { Cell } from '../models/Cell'
-import { Colors } from '../models/Colors'
-import { FigureNames } from '../models/figures/Figure'
-import { Queen } from '../models/figures/Queen'
-import { Rook } from '../models/figures/Rook'
-import { Knight } from '../models/figures/Knight'
-import { Archer } from '../models/figures/Archer'
-import { Bishop } from '../models/figures/Bishop'
 
 interface Check {
   active: boolean

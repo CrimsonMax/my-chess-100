@@ -14,9 +14,17 @@ interface Promo {
   color: Colors
   target: Cell | null
   startCell: Cell | null
+  isCheck: (check: boolean) => void
 }
 
-const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell }) => {
+export interface PromoModal {
+  active: boolean
+  color: Colors
+  startCell: Cell
+  promoCell: Cell
+}
+
+const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell, isCheck }) => {
   function setPromoFigure(name: string) {
     if (target === null || startCell === null) return
 
@@ -45,7 +53,7 @@ const PromotionModal: FC<Promo> = ({ active, setActive, color, target, startCell
         break;
     }
 
-    startCell.moveFigure(target)
+    startCell.moveFigure(target, undefined, isCheck)
 
     setActive(false)
   }

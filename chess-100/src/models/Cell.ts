@@ -1,4 +1,4 @@
-import { PromoModal } from "../App"
+import { PromoModal } from "../components/PromotionModal"
 import { Board } from "./Board"
 import { Colors } from "./Colors"
 import { Figure, FigureNames } from "./figures/Figure"
@@ -110,7 +110,6 @@ export class Cell {
         this.figure = null
         promoCell.figure = null
 
-        // isPromo(true, color, promoCell, startCell)
         isPromo({active: true, color, promoCell, startCell})
       } else {
         let currentFigure: Figure = this.figure

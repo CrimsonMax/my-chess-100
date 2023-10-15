@@ -3,8 +3,7 @@ import { Board } from "../models/Board"
 import CellComponent from "./CellComponent"
 import { Cell } from "../models/Cell"
 import { Player } from "../models/Player"
-import { Colors } from "../models/Colors"
-import { PromoModal } from "../App"
+import { PromoModal } from "./PromotionModal"
 
 interface BoardProps {
   board: Board
