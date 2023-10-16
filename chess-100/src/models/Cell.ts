@@ -110,7 +110,7 @@ export class Cell {
         this.figure = null
         promoCell.figure = null
 
-        isPromo({active: true, color, promoCell, startCell})
+        isPromo({ active: true, color, promoCell, startCell })
       } else {
         let currentFigure: Figure = this.figure
         let currentCell: Cell = this.figure.cell
@@ -226,86 +226,102 @@ export class Cell {
               this.board.getCell(Cell.checkX - 1, Cell.checkY + 1),
             ]
 
-            kingsArray.forEach(elem => {
-              if (kingFigure?.canMove(elem)) kingCanMove = true
-            })
-
             this.checkAllCells(setDefendStatus)
 
             let canMoveToRedCell = false
 
-            if (!kingCanMove && !killKiller) {
+            // fix when killer is not a killer
+            if (true) {
+              kingsArray.forEach(elem => {
+                if (kingFigure?.canMove(elem)) kingCanMove = true
+              })
 
-              if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER)) {
+              if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER && !kingCanMove && !killKiller)) {
+                checkMate = true
                 isCheck && isCheck(false)
               } else {
+                let redCell: Cell | null = null
 
-                if (kingCell.x === target.x || kingCell.y === target.y) {
+                if (kingCell.x === target.x || kingCell.y === target.y) { // horisontal or vertical attack
                   let cellEqual = null
                   let start = null
                   let end = null
 
-                  if (kingCell.x === target.x) {
+                  if (kingCell.x === target.x) { // vertical attack
                     cellEqual = target.x
 
-                    if (target.y > kingCell.y) {
+                    if (target.y > kingCell.y) { // from bottom
                       start = target.y
                       end = kingCell.y
-                    } else {
+
+                      redCell = this.board.getCell(cellEqual, kingCell.y - 1)
+                    } else { // from top
                       start = kingCell.y
                       end = target.y
+
+                      redCell = this.board.getCell(cellEqual, kingCell.y + 1)
                     }
 
                     for (let i = end + 1; i < start; i++) {
                       kingCellsUnderAttack.push(this.board.getCell(cellEqual, i))
                     }
-                  } else {
+                  } else { // horizontal attack
                     cellEqual = target.y
 
-                    if (target.x > kingCell.x) {
+                    if (target.x > kingCell.x) { // from right
                       start = target.x
                       end = kingCell.x
-                    } else {
+
+                      redCell = this.board.getCell(kingCell.x - 1, cellEqual)
+                    } else { // from left
                       start = kingCell.x
                       end = target.x
+
+                      redCell = this.board.getCell(kingCell.x + 1, cellEqual)
                     }
 
                     for (let i = end + 1; i < start; i++) {
                       kingCellsUnderAttack.push(this.board.getCell(i, cellEqual))
                     }
                   }
-                } else {
+                } else { // diagonal attack
                   let attactX = target.x
                   let attackY = target.y
                   let kingX = kingCell.x
                   let kingY = kingCell.y
 
                   if (attactX > kingX && attackY < kingY) { // right-top
+                    redCell = this.board.getCell(kingX - 1, kingY + 1)
 
                     for (let i = kingX + 1; i < attactX; i++) {
                       kingCellsUnderAttack.push(this.board.getCell(i, kingY - (i - kingX)))
                     }
-
                   } else if (attactX > kingX && attackY > kingY) { // right-bottom
+                    redCell = this.board.getCell(kingX - 1, kingY - 1)
 
                     for (let i = kingX + 1; i < attactX; i++) {
                       kingCellsUnderAttack.push(this.board.getCell(i, kingY + (i - kingX)))
                     }
-
                   } else if (attactX < kingX && attackY > kingY) { // left-bottom
+                    redCell = this.board.getCell(kingX + 1, kingY - 1)
 
                     for (let i = kingX - 1; i > attactX; i--) {
                       kingCellsUnderAttack.push(this.board.getCell(i, kingY + (kingX - i)))
                     }
-
                   } else { // left-top
+                    redCell = this.board.getCell(kingX + 1, kingY + 1)
 
                     for (let i = kingX - 1; i > attactX; i--) {
                       kingCellsUnderAttack.push(this.board.getCell(i, kingY - (kingX - i)))
                     }
-
                   }
                 }
+
+                kingCanMove = false
+
+                kingsArray.forEach(elem => {
+                  if (kingFigure?.canMove(elem) && elem !== redCell) kingCanMove = true
+                })
 
                 for (let i = 0; i < defenceArray.length; i++) {
                   kingCellsUnderAttack.forEach(elem => {
@@ -316,7 +332,7 @@ export class Cell {
                   })
                 }
 
-                if (!canMoveToRedCell) {
+                if (!canMoveToRedCell && !kingCanMove) {
                   checkMate = true
                   isCheck && isCheck(false)
                 }
