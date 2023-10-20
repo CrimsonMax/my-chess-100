@@ -136,6 +136,8 @@ export class Cell {
         let killKiller: boolean = false
         let kingCell: Cell | null = null
 
+        let kingKiller: Cell | null = null
+
         const setEnemyAttackingFigures = (cell: Cell) => {
           if (cell.redCell) cell.redCell = false
 
@@ -197,8 +199,12 @@ export class Cell {
         }
 
         const setDefendStatus = (cell: Cell) => {
-          if (cell.figure?.color === oppositeColor && cell.figure.canMove(target)) {
-            killKiller = true
+          if (cell.figure?.color === oppositeColor && cell.figure?.name === FigureNames.KING) {
+            kingCell = cell
+          }
+          
+          if (kingCell && cell.figure?.color === currentColor && cell.figure.canMove(kingCell)) {
+            kingKiller = cell
           }
 
           if (cell.figure?.color === oppositeColor) {
@@ -230,13 +236,18 @@ export class Cell {
 
             let canMoveToRedCell = false
 
-            // fix when killer is not a killer
-            if (true) {
+            defenceArray.forEach(elem => {
+              if (kingKiller && elem.canMove(kingKiller)) {
+                killKiller = true
+              }
+            })
+
+            if (!killKiller) {
               kingsArray.forEach(elem => {
                 if (kingFigure?.canMove(elem)) kingCanMove = true
               })
 
-              if (attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER && !kingCanMove && !killKiller)) {
+              if ((attackerName === (FigureNames.KNIGHT || FigureNames.ARCHER || FigureNames.PAWN)) && !kingCanMove) {
                 checkMate = true
                 isCheck && isCheck(false)
               } else {
@@ -323,6 +334,7 @@ export class Cell {
                   if (kingFigure?.canMove(elem) && elem !== redCell) kingCanMove = true
                 })
 
+                // if smb can prevent attack
                 for (let i = 0; i < defenceArray.length; i++) {
                   kingCellsUnderAttack.forEach(elem => {
                     if (defenceArray[i].canMove(elem) && !canMoveToRedCell) {
